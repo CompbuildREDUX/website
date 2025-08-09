@@ -6,152 +6,226 @@
     <title>Compbuild — Studio</title>
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                hotpink: '#ff0675',
+              },
+            },
+            boxShadow: {
+              soft: '0 10px 30px rgba(0,0,0,.08)'
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
       html,body{font-family:Manrope,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial}
       /* simple reveal */
-      .reveal{opacity:0; transform:translateY(12px); transition:opacity .6s ease,transform .6s ease}
+      .reveal{opacity:0; transform:translateY(14px); transition:opacity .7s ease,transform .7s ease}
       .reveal.revealed{opacity:1; transform:translateY(0)}
+      /* mobile menu fade */
+      .menu-enter{opacity:0; transform:scale(.98)}
+      .menu-enter.menu-open{opacity:1; transform:scale(1)}
     </style>
-
-    <!-- Tailwind (CDN) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Lucide icons (optional) -->
-    <script src="https://unpkg.com/lucide@latest"></script>
   </head>
-  <body class="min-h-screen bg-white text-black selection:bg-black selection:text-white">
+  <body class="min-h-screen bg-white text-black selection:bg-black selection:text-white dark:bg-neutral-950 dark:text-neutral-100">
     <!-- NAV -->
-    <header class="px-4 md:px-8 py-4 sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-black/10">
+    <header class="px-4 md:px-8 py-4 sticky top-0 z-50 bg-white/80 dark:bg-neutral-950/70 backdrop-blur border-b border-black/10 dark:border-white/10">
       <div class="max-w-[1300px] mx-auto grid grid-cols-3 items-center text-[14px] leading-tight">
-        <div class="tracking-tight">COMPBUILD Studio</div>
-        <div class="text-center text-black/70">
-          Cities that feel real. <span class="mx-2">•</span> <span id="clock">--:--:--</span>
+        <div class="tracking-tight font-medium">COMPBUILD Studio</div>
+        <div class="flex items-center justify-center gap-3 text-black/70 dark:text-white/60">
+          <span class="hidden sm:inline">Cities that feel real</span><span class="hidden sm:inline">•</span> <span id="clock">--:--:--</span>
         </div>
-        <div class="flex justify-end">
-          <a href="#start" class="inline-flex items-center gap-2 bg-black text-white px-3 py-1.5 rounded">
-            Start a project <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
-          </a>
+        <div class="flex items-center justify-end gap-2">
+          <nav class="hidden md:flex gap-5 text-[14px]">
+            <a href="#projects" class="hover:opacity-70">Projects</a>
+            <a href="#textures" class="hover:opacity-70">Textures</a>
+            <a href="#join" class="hover:opacity-70">Be a part of it</a>
+            <a href="#contact" class="hover:opacity-70">Contact</a>
+          </nav>
+          <button id="themeToggle" class="inline-flex items-center gap-2 px-2 py-1 rounded border border-black/10 dark:border-white/10" title="Toggle theme">
+            <i data-lucide="sun" class="w-4 h-4 hidden dark:inline"></i>
+            <i data-lucide="moon" class="w-4 h-4 inline dark:hidden"></i>
+          </button>
+          <button id="menuBtn" class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded border border-black/10 dark:border-white/10" aria-label="Menu">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile menu -->
+      <div id="mobileMenu" class="hidden menu-enter md:hidden">
+        <div class="max-w-[1300px] mx-auto px-1 pt-3 pb-4">
+          <div class="grid gap-2 text-[15px]">
+            <a href="#projects" class="px-3 py-2 rounded hover:bg-black/5 dark:hover:bg-white/10">Projects</a>
+            <a href="#textures" class="px-3 py-2 rounded hover:bg:black/5 dark:hover:bg-white/10">Textures</a>
+            <a href="#join" class="px-3 py-2 rounded hover:bg-black/5 dark:hover:bg-white/10">Be a part of it</a>
+            <a href="#contact" class="px-3 py-2 rounded hover:bg-black/5 dark:hover:bg-white/10">Contact</a>
+          </div>
         </div>
       </div>
     </header>
 
-    <!-- HERO -->
-    <section class="px-4 md:px-8 pt-10">
+    <!-- HERO (Tusaro-like: centered feature + giant wordmark) -->
+    <section class="px-4 md:px-8 pt-12 md:pt-16">
       <div class="max-w-[1300px] mx-auto">
-        <div class="max-w-[560px]">
-          <div class="aspect-[16/10] rounded overflow-hidden border border-black/10">
-            <img src="https://static.wixstatic.com/media/5f17e4_cc4be22a9aff4311a92220a5f33e6808~mv2.png/v1/fill/w_1600,h_1000,al_c,q_85,enc_auto/5f17e4_cc4be22a9aff4311a92220a5f33e6808~mv2.png" alt="Featured Compbuild scene" class="w-full h-full object-cover" />
+        <div class="mx-auto max-w-[620px]">
+          <div class="aspect-[16/10] rounded overflow-hidden border border-black/10 dark:border-white/10 shadow-soft">
+            <!-- from compbuildredux.net (wixstatic) -->
+            <img src="https://static.wixstatic.com/media/5f17e4_cc4be22a9aff4311a92220a5f33e6808~mv2.png/v1/fill/w_1600,h_1000,al_c,q_85,enc_auto/5f17e4_cc4be22a9aff4311a92220a5f33e6808~mv2.png" alt="Featured Compbuild scene" class="w-full h-full object-cover"/>
           </div>
-          <p class="mt-2 text-[14px] text-black/80">
+          <p class="mt-2 text-[14px] text-black/80 dark:text-white/70 text-center">
             We go out of our way to break the limits of Minecraft and turn it into more than just a game.
           </p>
         </div>
 
-        <!-- Big wordmark -->
-        <h1 class="reveal mt-20 md:mt-28 text-[23vw] md:text-[17vw] font-[800] tracking-[-0.02em] leading-[0.85] select-none">
+        <!-- Big wordmark for scroll time / whitespace -->
+        <h1 class="reveal mt-24 md:mt-32 text-[24vw] md:text-[18vw] font-[800] tracking-[-0.02em] leading-[0.85] select-none text-black/90 dark:text-white/90">
           COMPBUILD
         </h1>
       </div>
     </section>
 
     <!-- ABOUT -->
-    <section class="px-4 md:px-8 pt-8">
-      <div class="max-w-[1300px] mx-auto grid md:grid-cols-3 gap-8 items-start">
+    <section class="px-4 md:px-8 pt-14 md:pt-20">
+      <div class="max-w-[1300px] mx-auto grid md:grid-cols-3 gap-10 items-start">
         <h2 class="reveal text-[7vw] md:text-[5vw] font-semibold leading-[0.95] tracking-tight">What are we?</h2>
-        <p class="reveal text-[15px] leading-6 text-black/80">
+        <p class="reveal text-[15px] leading-7 text-black/80 dark:text-white/70">
           Minecraft is our way of expression; it’s our sandbox. Compbuild is a creative community founded in 2017 with a simple goal: build worlds that feel real.
         </p>
-        <p class="reveal text-[15px] leading-6 text-black/80">
+        <p class="reveal text-[15px] leading-7 text-black/80 dark:text-white/70">
           We use tools like WorldEdit, VoxelSniper, and our own Compbuild Texture Pack to push creativity beyond the default game, working collaboratively on massive cityscapes, national parks, and detailed builds.
         </p>
       </div>
     </section>
 
-    <!-- PROJECTS -->
-    <section id="projects" class="px-4 md:px-8 pt-20 pb-16">
+    <!-- PROJECTS (Alaire, Havelle, Austin) -->
+    <section id="projects" class="px-4 md:px-8 pt-24 pb-20">
       <div class="max-w-[1300px] mx-auto">
         <div class="flex items-center justify-between">
-          <div class="text-[14px] tracking-tight">(02) PROJECTS</div>
-          <a href="#" class="inline-flex items-center gap-2 bg-black text-white px-3 py-1.5 rounded text-[14px]">
+          <div class="text-[14px] tracking-tight opacity-70">(02) PROJECTS</div>
+          <a href="#" class="inline-flex items-center gap-2 bg-black text-white px-3 py-1.5 rounded text-[14px] dark:bg-white dark:text-black">
             All Projects <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
           </a>
         </div>
 
-        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Card 1 -->
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-7">
+          <!-- Alaire -->
           <article class="group reveal">
-            <div class="aspect-[16/10] overflow-hidden rounded border border-black/10">
-              <img src="https://static.wixstatic.com/media/5f17e4_5a0b46b70c2444fda0fe59814edaba17~mv2.png/v1/fill/w_1600,h_1000,q_85,enc_auto/5f17e4_5a0b46b70c2444fda0fe59814edaba17~mv2.png" alt="Alaire Metropolitan Region project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+            <div class="aspect-[16/10] overflow-hidden rounded border border-black/10 dark:border-white/10">
+              <img src="https://static.wixstatic.com/media/5f17e4_5a0b46b70c2444fda0fe59814edaba17~mv2.png/v1/fill/w_1600,h_1000,q_85,enc_auto/5f17e4_5a0b46b70c2444fda0fe59814edaba17~mv2.png" alt="Alaire" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
             </div>
             <div class="mt-3">
-              <div class="font-medium">Alaire Metropolitan Region</div>
-              <div class="text-black/70 text-[14px]">A cinematic coastal capital built collaboratively since 2017, blending historic districts, modern skylines, and rich lore.</div>
+              <div class="font-medium text-lg">Alaire</div>
+              <div class="text-black/70 dark:text-white/60 text-[14px]">Cinematic coastal capital with layered history, modern transit, and deep lore.</div>
             </div>
           </article>
 
-          <!-- Card 2 -->
+          <!-- Havelle -->
           <article class="group reveal">
-            <div class="aspect-[16/10] overflow-hidden rounded border border-black/10">
-              <img src="https://static.wixstatic.com/media/5f17e4_1ba49e74a89a4813a84d9e9b5aaad5dd~mv2.png/v1/fill/w_1600,h_1000,q_85,enc_auto/5f17e4_1ba49e74a89a4813a84d9e9b5aaad5dd~mv2.png" alt="Aricelle project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+            <div class="aspect-[16/10] overflow-hidden rounded border border-black/10 dark:border-white/10">
+              <!-- using a gallery image from compbuildredux wix -->
+              <img src="https://static.wixstatic.com/media/5f17e4_1ba49e74a89a4813a84d9e9b5aaad5dd~mv2.png/v1/fill/w_1600,h_1000,q_85,enc_auto/5f17e4_1ba49e74a89a4813a84d9e9b5aaad5dd~mv2.png" alt="Havelle" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
             </div>
             <div class="mt-3">
-              <div class="font-medium">Aricelle</div>
-              <div class="text-black/70 text-[14px]">A satellite city with its own skyline — modern urban energy meets historic charm.</div>
+              <div class="font-medium text-lg">Havelle</div>
+              <div class="text-black/70 dark:text-white/60 text-[14px]">Harbor city energy — dense streets, waterfront industry, and vibrant districts.</div>
             </div>
           </article>
 
-          <!-- Card 3 -->
+          <!-- Austin -->
           <article class="group reveal">
-            <div class="aspect-[16/10] overflow-hidden rounded border border-black/10">
-              <img src="https://static.wixstatic.com/media/5f17e4_86c1c42b56a445099cdb461027e7a150~mv2.png/v1/fill/w_1600,h_1000,q_85,enc_auto/5f17e4_86c1c42b56a445099cdb461027e7a150~mv2.png" alt="Rocheuse National Park project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+            <div class="aspect-[16/10] overflow-hidden rounded border border-black/10 dark:border-white/10">
+              <img src="https://static.wixstatic.com/media/5f17e4_86c1c42b56a445099cdb461027e7a150~mv2.png/v1/fill/w_1600,h_1000,q_85,enc_auto/5f17e4_86c1c42b56a445099cdb461027e7a150~mv2.png" alt="Austin" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
             </div>
             <div class="mt-3">
-              <div class="font-medium">Rocheuse National Park</div>
-              <div class="text-black/70 text-[14px]">Granite peaks, foggy valleys, and untouched wilderness — built at 1:1 for immersion.</div>
+              <div class="font-medium text-lg">Austin</div>
+              <div class="text-black/70 dark:text-white/60 text-[14px]">Texas-inspired skyline experiments, hill‑country biomes, and urban sprawl.</div>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- TEXTURES -->
-    <section id="textures" class="px-4 md:px-8 pt-24 pb-20" style="background: linear-gradient(135deg, #ff00cc 0%, #8e2de2 50%, #4a00e0 100%);">
-      <div class="max-w-[1300px] mx-auto text-white">
-        <div class="flex items-center justify-between">
-          <h2 class="text-3xl md:text-5xl font-semibold tracking-tight">Compbuild Textures</h2>
-          <div class="flex gap-2">
-            <a href="https://modrinth.com/resourcepack/compbuild-textures" target="_blank" class="inline-flex items-center gap-2 bg-white text-black px-3 py-1.5 rounded text-[14px]">Modrinth <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
-            <a href="https://github.com/CompbuildREDUX/Compbuild-Textures" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 rounded text-[14px] border border-white/20">GitHub <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+    <!-- TEXTURES (magenta gradient block, Tusaro-minimal layout) -->
+    <section id="textures" class="relative overflow-hidden">
+      <!-- gradient backdrop contained to this section only -->
+      <div class="absolute inset-0 -z-10 opacity-[0.95]" aria-hidden="true" style="background: radial-gradient(1600px 800px at 20% 10%, rgba(255,6,117,.5), transparent 60%), radial-gradient(1400px 900px at 80% 30%, rgba(91,44,255,.45), transparent 65%), linear-gradient(135deg, rgba(255,6,117,.35) 0%, rgba(91,44,255,.35) 100%);"></div>
+
+      <div class="px-4 md:px-8 pt-20 pb-16">
+        <div class="max-w-[1300px] mx-auto">
+          <div class="flex items-center justify-between">
+            <h2 class="text-2xl md:text-4xl font-semibold tracking-tight">Compbuild Textures</h2>
+            <div class="flex gap-2">
+              <a href="https://modrinth.com/resourcepack/compbuild-textures" target="_blank" class="inline-flex items-center gap-2 bg-black text-white px-3 py-1.5 rounded text-[14px] dark:bg-white dark:text-black">Modrinth <i data-lucide=arrow-up-right class="w-4 h-4"></i></a>
+              <a href="https://github.com/CompbuildREDUX/Compbuild-Textures" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 rounded text-[14px] border border-black/10 dark:border-white/20 backdrop-blur">GitHub <i data-lucide=arrow-up-right class="w-4 h-4"></i></a>
+            </div>
+          </div>
+          <p class="mt-3 text-sm text-black/80 dark:text-white/80 max-w-3xl">
+            A realistic resource pack designed for creative building with thousands of models via biome dependency and custom item models. Keep it on the latest Minecraft; use with our Luminium modpack for best results.
+          </p>
+
+          <!-- minimal gallery strip, Tusaro vibe -->
+          <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div class="aspect-[16/10] overflow-hidden rounded-lg border border-black/10/50 dark:border-white/10 reveal bg-white/40 dark:bg-white/5">
+              <img class="w-full h-full object-cover" src="https://static.wixstatic.com/media/5f17e4_8b40df6e1a4c4a6f92b6b98b5b0e8c2a~mv2.png/v1/fill/w_1600,h_1000,q_85,enc_auto/5f17e4_8b40df6e1a4c4a6f92b6b98b5b0e8c2a~mv2.png" alt="Textures preview 1" />
+            </div>
+            <div class="aspect-[16/10] overflow-hidden rounded-lg border border-black/10/50 dark:border-white/10 reveal bg-white/40 dark:bg-white/5">
+              <img class="w-full h-full object-cover" src="https://static.wixstatic.com/media/5f17e4_cfac0b3b1c2a4a8da3d2c5311a7b5d89~mv2.png/v1/fill/w_1600,h_1000,q_85,enc_auto/5f17e4_cfac0b3b1c2a4a8da3d2c5311a7b5d89~mv2.png" alt="Textures preview 2" />
+            </div>
+            <div class="aspect-[16/10] overflow-hidden rounded-lg border border-black/10/50 dark:border-white/10 reveal bg-white/40 dark:bg-white/5">
+              <img class="w-full h-full object-cover" src="https://static.wixstatic.com/media/5f17e4_7c3c4cf5f3c944c2b8c1e0b5a10e6a7f~mv2.png/v1/fill/w_1600,h_1000,q_85,enc_auto/5f17e4_7c3c4cf5f3c944c2b8c1e0b5a10e6a7f~mv2.png" alt="Textures preview 3" />
+            </div>
           </div>
         </div>
-        <p class="mt-4 text-base text-white/80 max-w-3xl leading-relaxed">
-          A realistic resource pack designed for creative building with thousands of models via biome dependency and custom item models.
-          Keep it on the latest Minecraft; use with our Luminium modpack for the best results. 
-          Every texture is carefully crafted to bring depth, realism, and immersion to your builds — from detailed facades to intricate interiors.
-        </p>
+      </div>
+    </section>
 
-        <!-- Gallery -->
-        <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <img src="https://static.wixstatic.com/media/5f17e4_bffb1b96e5dd4b56bb33f78b7fd51e41~mv2.png" class="w-full h-64 object-cover rounded-lg shadow-lg" alt="Texture Example 1">
-          <img src="https://static.wixstatic.com/media/5f17e4_96c8338f1c4e456780a93a72f8c89b6e~mv2.png" class="w-full h-64 object-cover rounded-lg shadow-lg" alt="Texture Example 2">
-          <img src="https://static.wixstatic.com/media/5f17e4_86c1c42b56a445099cdb461027e7a150~mv2.png" class="w-full h-64 object-cover rounded-lg shadow-lg" alt="Texture Example 3">
-          <img src="https://static.wixstatic.com/media/5f17e4_1ba49e74a89a4813a84d9e9b5aaad5dd~mv2.png" class="w-full h-64 object-cover rounded-lg shadow-lg" alt="Texture Example 4">
-          <img src="https://static.wixstatic.com/media/5f17e4_5a0b46b70c2444fda0fe59814edaba17~mv2.png" class="w-full h-64 object-cover rounded-lg shadow-lg" alt="Texture Example 5">
-          <img src="https://static.wixstatic.com/media/5f17e4_cc4be22a9aff4311a92220a5f33e6808~mv2.png" class="w-full h-64 object-cover rounded-lg shadow-lg" alt="Texture Example 6">
-        </div>
-
-        <!-- CTA -->
-        <div class="mt-24 text-center">
-          <h3 class="text-[8vw] font-extrabold tracking-tight leading-none">WHAT ARE YOU WAITING FOR?</h3>
-          <p class="mt-6 text-2xl font-medium">Join us now at <span class="font-bold">play.compbuildredux.net</span></p>
+    <!-- JOIN / BE A PART OF IT (big black block with copy IP) -->
+    <section id="join" class="bg-black text-white dark:bg-black">
+      <div class="px-4 md:px-8 py-24">
+        <div class="max-w-[1300px] mx-auto grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <h2 class="text-[11vw] md:text-[6vw] font-extrabold leading-[0.9] tracking-tight">BE A PART OF IT</h2>
+            <p class="mt-4 text-white/80 max-w-xl text-[15px] leading-7">
+              Build with us. Push Minecraft past its limits with cities, parks, and worlds that feel real.
+            </p>
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+              <div class="inline-flex items-center rounded-lg bg-white text-black px-3 py-2 text-[14px]">
+                <span id="serverIp">play.compbuildredux.net</span>
+              </div>
+              <button id="copyBtn" class="inline-flex items-center gap-2 rounded-lg border border-white/20 px-3 py-2 text-[14px]">
+                <i data-lucide="copy" class="w-4 h-4"></i> Copy IP
+              </button>
+              <a href="https://discord.gg/Kw7stMa" target="_blank" class="inline-flex items-center gap-2 rounded-lg bg-white text-black px-3 py-2 text-[14px]"><i data-lucide="users" class="w-4 h-4"></i> Join Discord</a>
+            </div>
+            <p id="copiedMsg" class="mt-2 text-sm text-emerald-300 hidden">Copied to clipboard!</p>
+          </div>
+          <div class="reveal">
+            <div class="aspect-[16/10] rounded overflow-hidden border border-white/10 shadow-soft">
+              <img src="https://static.wixstatic.com/media/5f17e4_cc4be22a9aff4311a92220a5f33e6808~mv2.png/v1/fill/w_1600,h_1000,al_c,q_85,enc_auto/5f17e4_cc4be22a9aff4311a92220a5f33e6808~mv2.png" class="w-full h-full object-cover" alt="Community preview" />
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="px-4 md:px-8 pb-10 border-t border-black/10">
-      <div class="max-w-[1300px] mx-auto flex items-center justify-between text-[14px] text-black/60">
+    <!-- FOOTER / CONTACT -->
+    <footer id="contact" class="px-4 md:px-8 py-12 border-t border-black/10 dark:border-white/10">
+      <div class="max-w-[1300px] mx-auto flex flex-col md:flex-row gap-6 md:items-center md:justify-between text-[14px] text-black/60 dark:text-white/60">
         <div>© <span id="year"></span> Compbuild</div>
         <div class="space-x-4">
           <a class="underline-offset-4 hover:underline" href="https://discord.gg/Kw7stMa" target="_blank">Discord</a>
@@ -173,15 +247,49 @@
       // year
       document.getElementById('year').textContent = new Date().getFullYear();
 
-      // simple reveal on scroll
+      // reveal on scroll
       const io = new IntersectionObserver((entries) => {
-        entries.forEach(e => e.isIntersecting && e.target.classList.add('revealed'));
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('revealed'); });
       }, {threshold: .2});
       document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
       // icons
       if (window.lucide) lucide.createIcons();
+
+      // theme toggle with persistence
+      const themeToggle = document.getElementById('themeToggle');
+      const root = document.documentElement;
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        root.classList.add('dark');
+      }
+      themeToggle.addEventListener('click', () => {
+        root.classList.toggle('dark');
+        localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+        if (window.lucide) lucide.createIcons();
+      });
+
+      // copy server IP
+      const copyBtn = document.getElementById('copyBtn');
+      const serverIp = document.getElementById('serverIp').textContent;
+      const copiedMsg = document.getElementById('copiedMsg');
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(serverIp);
+          copiedMsg.classList.remove('hidden');
+          setTimeout(() => copiedMsg.classList.add('hidden'), 1600);
+        } catch (e) { alert('Copy failed.'); }
+      });
+
+      // mobile menu
+      const menuBtn = document.getElementById('menuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      menuBtn?.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        mobileMenu.classList.toggle('menu-open');
+      });
     </script>
   </body>
 </html>
+
 
