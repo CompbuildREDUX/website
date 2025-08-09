@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Compbuild — Studio</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      html,body{font-family:Manrope,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial}
+      /* simple reveal */
+      .reveal{opacity:0; transform:translateY(12px); transition:opacity .6s ease,transform .6s ease}
+      .reveal.revealed{opacity:1; transform:translateY(0)}
+    </style>
+
+    <!-- Tailwind (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide icons (optional) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body class="min-h-screen bg-white text-black selection:bg-black selection:text-white">
+    <!-- NAV -->
+    <header class="px-4 md:px-8 py-4 sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-black/10">
+      <div class="max-w-[1300px] mx-auto grid grid-cols-3 items-center text-[14px] leading-tight">
+        <div class="tracking-tight">COMPBUILD Studio</div>
+        <div class="text-center text-black/70">
+          Cities that feel real. <span class="mx-2">•</span> <span id="clock">--:--:--</span>
+        </div>
+        <div class="flex justify-end">
+          <a href="#start" class="inline-flex items-center gap-2 bg-black text-white px-3 py-1.5 rounded">
+            Start a project <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="px-4 md:px-8 pt-10">
+      <div class="max-w-[1300px] mx-auto">
+        <div class="max-w-[560px]">
+          <div class="aspect-[16/10] rounded overflow-hidden border border-black/10">
+            <img src="https://static.wixstatic.com/media/5f17e4_cc4be22a9aff4311a92220a5f33e6808~mv2.png/v1/fill/w_1600,h_1000,al_c,q_85,enc_auto/5f17e4_cc4be22a9aff4311a92220a5f33e6808~mv2.png" alt="Featured Compbuild scene" class="w-full h-full object-cover" />
+          </div>
+          <p class="mt-2 text-[14px] text-black/80">
+            We go out of our way to break the limits of Minecraft and turn it into more than just a game.
+          </p>
+        </div>
+
+        <!-- Big wordmark -->
+        <h1 class="reveal mt-20 md:mt-28 text-[23vw] md:text-[17vw] font-[800] tracking-[-0.02em] leading-[0.85] select-none">
+          COMPBUILD
+        </h1>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="px-4 md:px-8 pt-8">
+      <div class="max-w-[1300px] mx-auto grid md:grid-cols-3 gap-8 items-start">
+        <h2 class="reveal text-[7vw] md:text-[5vw] font-semibold leading-[0.95] tracking-tight">What are we?</h2>
+        <p class="reveal text-[15px] leading-6 text-black/80">
+          Minecraft is our way of expression; it’s our sandbox. Compbuild is a creative community founded in 2017 with a simple goal: build worlds that feel real.
+        </p>
+        <p class="reveal text-[15px] leading-6 text-black/80">
+          We use tools like WorldEdit, VoxelSniper, and our own Compbuild Texture Pack to push creativity beyond the default game, working collaboratively on massive cityscapes, national parks, and detailed builds.
+        </p>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="px-4 md:px-8 pt-20 pb-16">
+      <div class="max-w-[1300px] mx-auto">
+        <div class="flex items-center justify-between">
+          <div class="text-[14px] tracking-tight">(02) PROJECTS</div>
+          <a href="#" class="inline-flex items-center gap-2 bg-black text-white px-3 py-1.5 rounded text-[14px]">
+            All Projects <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Card 1 -->
+          <article class="group reveal">
+            <div class="aspect-[16/10] overflow-hidden rounded border border-black/10">
+              <img src="https://static.wixstatic.com/media/5f17e4_5a0b46b70c2444fda0fe59814edaba17~mv2.png/v1/fill/w_1600,h_1000,q_85,enc_auto/5f17e4_5a0b46b70c2444fda0fe59814edaba17~mv2.png" alt="Alaire Metropolitan Region project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+            </div>
+            <div class="mt-3">
+              <div class="font-medium">Alaire Metropolitan Region</div>
+              <div class="text-black/70 text-[14px]">A cinematic coastal capital built collaboratively since 2017, blending historic districts, modern skylines, and rich lore.</div>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="group reveal">
+            <div class="aspect-[16/10] overflow-hidden rounded border border-black/10">
+              <img src="https://static.wixstatic.com/media/5f17e4_1ba49e74a89a4813a84d9e9b5aaad5dd~mv2.png/v1/fill/w_1600,h_1000,q_85,enc_auto/5f17e4_1ba49e74a89a4813a84d9e9b5aaad5dd~mv2.png" alt="Aricelle project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+            </div>
+            <div class="mt-3">
+              <div class="font-medium">Aricelle</div>
+              <div class="text-black/70 text-[14px]">A satellite city with its own skyline — modern urban energy meets historic charm.</div>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="group reveal">
+            <div class="aspect-[16/10] overflow-hidden rounded border border-black/10">
+              <img src="https://static.wixstatic.com/media/5f17e4_86c1c42b56a445099cdb461027e7a150~mv2.png/v1/fill/w_1600,h_1000,q_85,enc_auto/5f17e4_86c1c42b56a445099cdb461027e7a150~mv2.png" alt="Rocheuse National Park project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+            </div>
+            <div class="mt-3">
+              <div class="font-medium">Rocheuse National Park</div>
+              <div class="text-black/70 text-[14px]">Granite peaks, foggy valleys, and untouched wilderness — built at 1:1 for immersion.</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEXTURES -->
+    <section id="textures" class="px-4 md:px-8 pt-16 pb-8">
+      <div class="max-w-[1300px] mx-auto">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl md:text-4xl font-semibold tracking-tight">Compbuild Textures</h2>
+          <div class="flex gap-2">
+            <a href="https://modrinth.com/resourcepack/compbuild-textures" target="_blank" class="inline-flex items-center gap-2 bg-black text-white px-3 py-1.5 rounded text-[14px]">Modrinth <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+            <a href="https://github.com/CompbuildREDUX/Compbuild-Textures" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 rounded text-[14px] border border-black/10">GitHub <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+          </div>
+        </div>
+        <p class="mt-3 text-sm text-black/70 max-w-3xl">
+          A realistic resource pack designed for creative building with thousands of models via biome dependency and custom item models. Keep it on the latest Minecraft; use with our Luminium modpack for best results.
+        </p>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="px-4 md:px-8 pb-10 border-t border-black/10">
+      <div class="max-w-[1300px] mx-auto flex items-center justify-between text-[14px] text-black/60">
+        <div>© <span id="year"></span> Compbuild</div>
+        <div class="space-x-4">
+          <a class="underline-offset-4 hover:underline" href="https://discord.gg/Kw7stMa" target="_blank">Discord</a>
+          <a class="underline-offset-4 hover:underline" href="https://instagram.com/compbuildredux" target="_blank">Instagram</a>
+          <a class="underline-offset-4 hover:underline" href="https://x.com/compbuild_redux" target="_blank">X / Twitter</a>
+          <a class="underline-offset-4 hover:underline" href="https://youtube.com/@CompbuildREDUX" target="_blank">YouTube</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // live clock
+      const clock = document.getElementById('clock');
+      setInterval(() => {
+        const d = new Date();
+        clock.textContent = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+      }, 1000);
+
+      // year
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // simple reveal on scroll
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => e.isIntersecting && e.target.classList.add('revealed'));
+      }, {threshold: .2});
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+      // icons
+      if (window.lucide) lucide.createIcons();
+    </script>
+  </body>
+</html>
