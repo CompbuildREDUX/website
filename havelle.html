@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Havelle — Compbuild</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#ffffff; --fg:#0a0a0a; --muted:#6b6b6b; --line: color-mix(in oklab, var(--fg) 12%, transparent);
+      --card: color-mix(in oklab, var(--fg) 5%, transparent); --max:1280px; --pad:clamp(16px,3vw,40px);
+      --accent:#1f8cff; --pink:#ff0675; --violet:#7c3cff;
+    }
+    [data-theme="dark"]{
+      --bg:#0a0a0a; --fg:#f5f5f5; --muted:#a4a4a4; --line: color-mix(in oklab, var(--fg) 16%, transparent);
+      --card: color-mix(in oklab, var(--fg) 6%, transparent);
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:"Manrope",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--fg);}
+    a{color:inherit; text-decoration:none}
+    img{display:block; max-width:100%; height:auto}
+    .wrap{max-width:var(--max); margin-inline:auto; padding-inline:var(--pad)}
+    .stack{display:grid; gap:clamp(16px,2vw,28px)}
+
+    /* NAV (consistent with site) */
+    .nav{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(8px); background: color-mix(in oklab, var(--bg) 85%, transparent); border-bottom:1px solid var(--line)}
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px var(--pad)}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img.logo{width:28px; height:28px}
+    .nav-links{display:flex; gap:20px; align-items:center}
+    .btn{display:inline-flex; align-items:center; gap:10px; border:1px solid var(--line); padding:10px 14px; border-radius:0}
+    .btn.arrow::after{content:"→"; margin-left:6px; transition:transform .2s ease}
+    .btn.arrow:hover::after{transform:translateX(3px)}
+
+    /* PARALLAX + HERO */
+    .parallax{position:relative; overflow:clip}
+    .hero{position:relative; min-height:80svh; display:grid; place-items:end start; border-bottom:1px solid var(--line)}
+    .hero-media{position:absolute; inset:0;}
+    .hero-media img{position:absolute; inset:-4%; width:108%; height:108%; object-fit:cover; filter:grayscale(1) contrast(1.05); opacity:.82; transform:translateY(var(--y,0px))}
+    .layer{position:absolute; inset:0; pointer-events:none}
+    .layer.glow-back{background:
+      radial-gradient(1000px 60% at 10% 15%, color-mix(in oklab,var(--fg) 6%, transparent), transparent),
+      radial-gradient(800px 50% at 90% 10%, color-mix(in oklab,var(--fg) 4%, transparent), transparent)}
+    .layer.glow-mid{background:
+      radial-gradient(600px 40% at 70% 70%, color-mix(in oklab,var(--fg) 5%, transparent), transparent)}
+    .hero-scrim{position:absolute; inset:auto 0 0 0; height:36svh; background:linear-gradient(to bottom, transparent, color-mix(in oklab,var(--bg) 85%, transparent) 60%, var(--bg))}
+    .hero .copy{position:relative; z-index:2; padding:clamp(36px,9vw,120px) var(--pad)}
+    .eyebrow{font-size:.9rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+    h1{font-size:clamp(36px,6.8vw,86px); line-height:1.02; margin:8px 0 12px}
+    .lead{color:var(--muted); font-size:clamp(16px,1.4vw,18px)}
+
+    /* SCATTER CHIPS */
+    .scatter{position:relative; margin-top:12px; height:120px}
+    .chip{position:absolute; padding:6px 10px; border:1px solid var(--line); background:color-mix(in oklab,var(--fg) 3%, transparent); font-size:.82rem; white-space:nowrap}
+
+    /* SECTIONS */
+    section{padding: clamp(60px, 10vw, 140px) 0; border-bottom:1px solid var(--line)}
+    h2{font-size:clamp(28px,4.5vw,44px); margin:0 0 12px}
+    h3{margin:.2rem 0 .4rem; font-size:1.15rem}
+    ul{margin:0; padding-left:1.2em}
+
+    /* FEATURE CARDS (tilt) */
+    .features{display:grid; grid-template-columns:repeat(12,1fr); gap:16px}
+    .feature{grid-column:span 12; border:1px solid var(--line); background:var(--card); padding:18px; transform-style:preserve-3d}
+    @media (min-width:900px){ .feature{grid-column:span 4} }
+
+    /* FACT BAR */
+    .facts{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
+    .fact{border:1px solid var(--line); padding:16px; background:var(--card)}
+    .fact b{font-size:clamp(22px,3.2vw,28px)}
+    @media (min-width:900px){ .facts{grid-template-columns: repeat(4, minmax(0,1fr));} }
+
+    /* Reveal */
+    .reveal{opacity:0; translate:0 10px; transition:opacity .6s ease, translate .6s ease}
+    .reveal.in{opacity:1; translate:0 0}
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <header class="nav">
+    <div class="nav-inner wrap">
+      <a href="/website/" class="brand" aria-label="Compbuild home">
+        <img class="logo" src="https://static.wixstatic.com/media/5f17e4_8d64bc05672c4787bcc7a5b3220e4303~mv2.png/v1/fill/w_53,h_53,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/5f17e4_8d64bc05672c4787bcc7a5b3220e4303~mv2.png" alt="Compbuild" />
+      </a>
+      <nav class="nav-links">
+        <a href="/website/#about">About</a>
+        <a href="/website/#projects">Projects</a>
+        <a href="/website/#pack">Textures</a>
+        <button id="themeToggle" class="btn arrow" aria-label="Toggle theme">Dark/Light</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO: layered parallax -->
+  <section class="hero parallax" id="top">
+    <div class="hero-media" aria-hidden="true">
+      <img class="bg" src="https://media.discordapp.net/attachments/772608163332489227/1403962809649463430/2025-05-09_18.56.24.png?ex=689a1e82&is=6898cd02&hm=9b5b949e69f0f5ab76ca4727116539789d7e178508c3a37a77d4bf996754002c&=&format=webp&quality=lossless&width=1521&height=856" alt="Havelle hero" />
+      <div class="layer glow-back" data-parallax data-speed="-0.25"></div>
+      <div class="layer glow-mid" data-parallax data-speed="-0.15"></div>
+      <div class="hero-scrim"></div>
+    </div>
+    <div class="copy wrap reveal" data-parallax data-speed="0.06">
+      <div class="eyebrow">British Isles • Western Europe • Compbuild Textures</div>
+      <h1>Havelle — Stone & Moss</h1>
+      <p class="lead">Begotten of bog and marsh, Havelle rose slow along the River Elderal. Where reeds once grew, stone stands; the mist clings like a mantle and the river’s song endures. Steadfast and storied, her streets hold tales of ages past.</p>
+      <div class="scatter" aria-hidden="true">
+        <span class="chip" style="left:6%; top:18%" data-parallax data-speed="0.2">#StoneAndMoss</span>
+        <span class="chip" style="left:34%; top:6%" data-parallax data-speed="0.12">Traditional Blocks</span>
+        <span class="chip" style="left:74%; top:36%" data-parallax data-speed="0.18">Custom Flora</span>
+      </div>
+      <div class="cta" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px">
+        <a class="btn arrow" href="https://discord.gg/compbuildredux" target="_blank" rel="noopener">Join Discord</a>
+        <span class="btn" data-copy="PLAY.COMPBUILDREDUX.NET" title="Copy server IP">IP: PLAY.COMPBUILDREDUX.NET</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about-havelle" class="reveal" data-parallax data-speed="0.04">
+    <div class="wrap stack">
+      <h2>About Havelle</h2>
+      <p class="lead">Havelle is the newest addition to Compbuild’s projects, arriving <b>April 17, 2025</b>. It showcases a side of <b>Compbuild Textures</b> with extraordinary potential — emphasizing traditional architecture and historic urban fabric.</p>
+      <p class="lead">Inspired primarily by the <b>British Isles</b> and <b>Northwest Europe</b> (but not limited to them), Havelle puts <b>architecture first</b>. The natural landscape is intentionally understated (though beautiful) — expect a <b>dense city</b> covering most of the current map.</p>
+      <p class="lead">Because the terrain is gorgeous on its own, we’ll also release a <b>world download of the landscape</b> separately — stay tuned.</p>
+    </div>
+  </section>
+
+  <!-- FEATURES with tilt -->
+  <section id="features" class="reveal" data-parallax data-speed="0.03">
+    <div class="wrap stack">
+      <h2>Features</h2>
+      <div class="features">
+        <div class="feature" data-tilt>
+          <h3>Custom trees (first-time)</h3>
+          <p class="lead">Debut of Compbuild Textures’ bespoke branch & log system for richer streets, greens, and courtyards.</p>
+        </div>
+        <div class="feature" data-tilt>
+          <h3>Traditional architecture focus</h3>
+          <p class="lead">New traditional blocks elevate classic European forms — masonry, slate, timber, and narrow streets.</p>
+        </div>
+        <div class="feature" data-tilt>
+          <h3>A new style for Compbuild</h3>
+          <p class="lead">Our first full EU-style map — roads, signage, and structural assets built to European conventions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATUS / VISIT -->
+  <section id="status" class="reveal" data-parallax data-speed="0.02">
+    <div class="wrap stack">
+      <h2>Now available on the server</h2>
+      <p class="lead">Havelle is live — showcasing the full potential of our architectural blocks and newest flora features. It’s also our sandbox for trying new styles with <b>Compbuild Textures</b>.</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+        <span class="btn" data-copy="PLAY.COMPBUILDREDUX.NET" title="Copy server IP">IP: PLAY.COMPBUILDREDUX.NET</span>
+        <a class="btn arrow" href="https://discord.gg/compbuildredux" target="_blank" rel="noopener">Discord Updates</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" class="reveal">
+    <div class="wrap stack">
+      <h2>Help shape Havelle</h2>
+      <p class="lead">Bring references and an eye for tradition — we’ll bring the textures. Join the community builds and contribute to the city’s stone‑and‑moss character.</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap">
+        <a class="btn arrow" href="https://discord.gg/compbuildredux" target="_blank" rel="noopener">Join Discord</a>
+        <span class="btn" data-copy="PLAY.COMPBUILDREDUX.NET" title="Copy server IP">IP: PLAY.COMPBUILDREDUX.NET</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <div class="stack muted">©2025 COMPBUILD REDUX — Not an official Minecraft service. Not affiliated with Mojang or Microsoft.</div>
+  </footer>
+
+  <script>
+    // Theme toggle + persist
+    const root = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('theme');
+    if(saved){ root.setAttribute('data-theme', saved); }
+    toggle?.addEventListener('click', () => {
+      const cur = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', cur);
+      localStorage.setItem('theme', cur);
+    });
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Reveal on view
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} })
+    }, {threshold: 0.12});
+    document.querySelectorAll('.reveal').forEach((el,i)=>{ el.style.transitionDelay = (i*40)+'ms'; io.observe(el); });
+
+    // Parallax engine
+    const parallaxNodes = prefersReduced ? [] : Array.from(document.querySelectorAll('[data-parallax]'));
+    let lastY = window.scrollY;
+    const tick = ()=>{
+      const y = window.scrollY;
+      if(Math.abs(y-lastY) > 0.2){
+        const vh = innerHeight;
+        parallaxNodes.forEach(n=>{
+          const speed = parseFloat(n.getAttribute('data-speed')||0);
+          const r = n.getBoundingClientRect();
+          if(r.top < vh*1.2 && r.bottom > -vh*0.2){
+            const offset = (y + r.top + r.height*0.5) * speed * -0.12;
+            n.style.transform = `translate3d(0, ${offset.toFixed(2)}px, 0)`;
+          }
+        });
+        lastY = y;
+      }
+      requestAnimationFrame(tick);
+    };
+    if(!prefersReduced) requestAnimationFrame(tick);
+
+    // Extra: hero BG parallax variable
+    const hero = document.querySelector('.hero');
+    const bg = document.querySelector('.hero .bg');
+    addEventListener('scroll', () => {
+      const r = hero.getBoundingClientRect();
+      const progress = Math.min(1, Math.max(0, ( -r.top ) / (r.height || 1)));
+      bg.style.setProperty('--y', (progress * -40) + 'px');
+    }, {passive:true});
+
+    // Card tilt
+    document.querySelectorAll('[data-tilt]').forEach(card=>{
+      card.addEventListener('pointermove', (e)=>{
+        const b = card.getBoundingClientRect();
+        const cx = (e.clientX - b.left) / b.width - 0.5;
+        const cy = (e.clientY - b.top) / b.height - 0.5;
+        card.style.transform = `perspective(900px) rotateX(${cy*-2}deg) rotateY(${cx*2}deg)`;
+      });
+      card.addEventListener('pointerleave', ()=>{ card.style.transform='none'; });
+    });
+
+    // Copy helpers
+    function copyText(str){
+      if(!str) return;
+      navigator.clipboard.writeText(str).catch(()=>{
+        const ta = document.createElement('textarea'); ta.value = str; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+      });
+    }
+    document.querySelectorAll('[data-copy]').forEach(btn=> btn.addEventListener('click', ()=> copyText(btn.getAttribute('data-copy'))));
+  </script>
+</body>
+</html>
