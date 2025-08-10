@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Compbuild Catalog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..900&display=swap" rel="stylesheet">
+  <style>
+    :root{ --bg:#ffffff; --fg:#0a0a0a; --muted:#6b6b6b; --line: color-mix(in oklab, var(--fg) 12%, transparent); --card: color-mix(in oklab, var(--fg) 5%, transparent); --max:1280px; --pad:clamp(16px,3vw,40px); --accent:#1f8cff; }
+    [data-theme="dark"]{ --bg:#0a0a0a; --fg:#f5f5f5; --muted:#a4a4a4; --line: color-mix(in oklab, var(--fg) 16%, transparent); --card: color-mix(in oklab, var(--fg) 6%, transparent); }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:"Manrope",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--fg)}
+    a{color:inherit; text-decoration:none}
+    img{display:block; max-width:100%; height:auto}
+
+    .wrap{max-width:var(--max); margin-inline:auto; padding-inline:var(--pad)}
+    .stack{display:grid; gap:clamp(16px,2vw,28px)}
+
+    /* NAV */
+    .nav{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(8px); background: color-mix(in oklab, var(--bg) 85%, transparent); border-bottom:1px solid var(--line)}
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px var(--pad)}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img.logo{width:28px; height:28px}
+    .nav-links{display:flex; gap:18px; align-items:center}
+    .btn{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line); padding:10px 14px; border-radius:0; background:transparent; color:inherit; cursor:pointer}
+    .btn:active{transform:translateY(1px)}
+    .btn.arrow::after{content:"→"; transition:transform .18s ease}
+    .btn.arrow:hover::after{transform:translateX(2px)}
+
+    /* HERO */
+    header.hero{border-bottom:1px solid var(--line); position:relative; overflow:hidden}
+    .hero .bg{position:absolute; inset:-4%; width:108%; height:108%; object-fit:cover; filter:contrast(1.05) saturate(1.02); opacity:.55; transform:translateY(var(--y,0px))}
+    .hero .scrim{position:absolute; inset:auto 0 0 0; height:28svh; background:linear-gradient(to bottom, transparent, color-mix(in oklab, var(--bg) 85%, transparent) 60%, var(--bg))}
+    .hero .inner{position:relative; z-index:1; padding:clamp(36px,9vw,110px) var(--pad)}
+    .eyebrow{font-size:.9rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+    h1{font-size:clamp(36px,6.6vw,84px); line-height:1.02; margin:8px 0 8px}
+    p.lead{color:var(--muted)}
+
+    /* CARDS */
+    section{padding: clamp(60px, 10vw, 140px) 0; border-bottom:1px solid var(--line)}
+    .grid{display:grid; gap:18px; grid-template-columns: repeat(12, 1fr)}
+    .card{grid-column:span 12; border:1px solid var(--line); background:var(--card); display:flex; flex-direction:column; overflow:hidden}
+    @media(min-width:800px){ .card{grid-column:span 4} }
+    .thumb{aspect-ratio: 16/10; background:color-mix(in oklab, var(--fg) 4%, transparent); overflow:hidden}
+    .thumb img{width:100%; height:100%; object-fit:cover}
+    .body{padding:16px}
+    .body h3{margin:4px 0 6px}
+    .muted{color:var(--muted)}
+
+    /* REVEAL */
+    .reveal{opacity:0; translate:0 10px; transition:opacity .6s ease, translate .6s ease}
+    .reveal.in{opacity:1; translate:0 0}
+
+    footer{padding:38px var(--pad); color:var(--muted)}
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <div class="nav">
+    <div class="nav-inner wrap">
+      <a href="/website/" class="brand" aria-label="Compbuild home">
+        <img class="logo" src="https://static.wixstatic.com/media/5f17e4_8d64bc05672c4787bcc7a5b3220e4303~mv2.png/v1/fill/w_53,h_53,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/5f17e4_8d64bc05672c4787bcc7a5b3220e4303~mv2.png" alt="Compbuild" />
+      </a>
+      <nav class="nav-links">
+        <a href="/website/#about">About</a>
+        <a href="/website/#projects">Projects</a>
+        <a href="/website/#pack">Textures</a>
+        <button id="themeToggle" class="btn arrow" aria-label="Toggle theme">Dark/Light</button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <img class="bg" src="https://cdn.discordapp.com/attachments/796149186307293244/1362182024412270672/2025-04-16_16.38.05.png?ex=6899bb9e&is=68986a1e&hm=e5779ea107fd9c73ba314220217b2b5a918b44c4f1e6f1c083035ffbbd46a531&" alt="Catalog hero" />
+    <div class="scrim"></div>
+    <div class="inner wrap">
+      <div class="eyebrow">Catalog</div>
+      <h1 class="reveal">Choose a category</h1>
+      <p class="lead reveal">Pick a catalog to browse. Each opens a dedicated, biomes‑only browser with search, quick preview, and one‑click copy.</p>
+    </div>
+  </header>
+
+  <!-- MENU CARDS -->
+  <section>
+    <div class="wrap">
+      <div class="grid">
+        <a class="card reveal" href="catalog-biome-models.html" data-slug="biomemodels">
+          <div class="thumb"><img src="https://static.wixstatic.com/media/5f17e4_a8455479d35e4ddaadecbb0598b851d2~mv2.png/v1/fill/w_600,h_337,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/5f17e4_a8455479d35e4ddaadecbb0598b851d2~mv2.png" alt="Biome Models" /></div>
+          <div class="body">
+            <h3>Biome Models</h3>
+            <div class="muted">Blocks with biome variants & model overrides</div>
+          </div>
+        </a>
+        <a class="card reveal" href="catalog-color-blocks.html" data-slug="color">
+          <div class="thumb"><img src="https://static.wixstatic.com/media/5f17e4_07a11c25c70246259ffbab0016cc0a7c~mv2.png/v1/fill/w_600,h_337,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/5f17e4_07a11c25c70246259ffbab0016cc0a7c~mv2.png" alt="Color Blocks" /></div>
+          <div class="body">
+            <h3>Color Blocks</h3>
+            <div class="muted">Tinted materials & palette sets</div>
+          </div>
+        </a>
+        <a class="card reveal" href="catalog-flora.html" data-slug="flora">
+          <div class="thumb"><img src="https://cdn.discordapp.com/attachments/796149186307293244/1398385069420314624/2025-07-25_13.11.05.png?ex=689a4315&is=6898f195&hm=c7e2f1b37f1bf444a71fd7e5e6dbc543acd0178b185e183493f1280c23e3b469&" alt="Flora" /></div>
+          <div class="body">
+            <h3>Flora</h3>
+            <div class="muted">Plants, trees & environment</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <div class="stack muted">©2025 COMPBUILD REDUX — Not an official Minecraft service. Not affiliated with Mojang or Microsoft.</div>
+  </footer>
+
+  <script>
+    // Theme toggle + persist
+    const root = document.documentElement; const toggle = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('theme'); if(saved){ root.setAttribute('data-theme', saved); }
+    toggle?.addEventListener('click', () => {
+      const cur = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', cur);
+      localStorage.setItem('theme', cur);
+    });
+
+    // Reveal-on-scroll
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} })
+    }, {threshold:0.12});
+    document.querySelectorAll('.reveal').forEach((el,i)=>{ el.style.transitionDelay = (i*40)+'ms'; io.observe(el); });
+
+    // Parallax hero (no fancy APIs)
+    const hero = document.querySelector('.hero'); const bg = document.querySelector('.hero .bg');
+    addEventListener('scroll', ()=>{ const r = hero.getBoundingClientRect(); const p = Math.min(1, Math.max(0, (-r.top)/(r.height||1))); bg.style.setProperty('--y', (p*-36)+'px'); }, {passive:true});
+
+    // --- Tiny diagnostics (kept simple; no unicode property escapes) ---
+    (function runTests(){
+      const cards = document.querySelectorAll('.card');
+      const eq=(a,b,msg)=>{ if(a!==b) console.error('[Menu Test FAIL]', msg, a, '≠', b); else console.log('[Menu Test OK]', msg); };
+      eq(cards.length, 3, 'three menu cards present');
+      const slugs = Array.from(cards).map(c=>c.getAttribute('data-slug')).join(',');
+      eq(slugs.includes('biomemodels') && slugs.includes('color') && slugs.includes('flora'), true, 'all slugs set');
+    })();
+  </script>
+</body>
+</html>
