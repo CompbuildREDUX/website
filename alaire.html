@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alaire — Compbuild</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0a0a; --fg:#f5f5f5; --muted:#a9a9a9; --line: color-mix(in oklab, var(--fg) 10%, transparent);
+      --max:1200px; --pad:clamp(16px,3vw,40px);
+      --accent: #ffffff;
+    }
+    [data-theme="light"]{--bg:#ffffff; --fg:#0a0a0a; --muted:#6b6b6b; --line: color-mix(in oklab, var(--fg) 10%, transparent); --accent:#000000}
+
+    html,body{height:100%;}
+    body{margin:0; font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif; background:var(--bg); color:var(--fg);}
+    a{color:inherit; text-decoration:none}
+    img{max-width:100%; display:block}
+    .wrap{max-width:var(--max); margin:auto; padding-inline:var(--pad)}
+
+    /* Topbar matches the GitHub Pages theme */
+    .topbar{position:sticky; top:0; z-index:50; backdrop-filter:saturate(1.2) blur(8px); background:color-mix(in oklab,var(--bg) 75%, transparent); border-bottom:1px solid var(--line)}
+    .topbar .inner{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px var(--pad)}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:0.3px}
+    .brand img{width:28px; height:28px}
+    nav a{opacity:.85; padding:8px 10px; border:1px solid transparent}
+    nav a:hover{opacity:1; border-color:var(--line)}
+    .toggle{border:1px solid var(--line); padding:8px 10px; background:transparent; color:var(--fg); cursor:pointer}
+
+    /* Hero */
+    .hero{position:relative; min-height:78svh; display:grid; place-items:end start; isolation:isolate; overflow:hidden}
+    .hero-media{position:absolute; inset:0; z-index:-1; transform:translateZ(0)}
+    .hero-media .bg{position:absolute; inset:-5%; object-fit:cover; width:110%; height:110%; filter:grayscale(1) contrast(1.05) opacity:.9; transform:translateY(var(--y,0px)); transition:transform .08s linear}
+    .hero .copy{padding:clamp(32px,10vw,110px) var(--pad)}
+    .eyebrow{font-size:.95rem; text-transform:uppercase; letter-spacing:.18em; color:var(--muted)}
+    h1{font-size:clamp(40px,9vw,104px); line-height:0.98; margin:10px 0 16px; letter-spacing:-0.02em}
+    .sub{font-size:clamp(14px,2.5vw,18px); max-width:62ch; color:var(--muted)}
+
+    /* Sections */
+    section{padding:72px 0; border-top:1px solid var(--line)}
+    .two-col{display:grid; grid-template-columns:1.2fr .8fr; gap:clamp(18px,4vw,40px)}
+    @media (max-width:960px){.two-col{grid-template-columns:1fr}}
+
+    .kicker{font-weight:800; text-transform:uppercase; letter-spacing:.14em; color:var(--muted); margin-bottom:8px}
+    h2{font-size:clamp(28px,5.2vw,56px); line-height:1.02; margin:6px 0 14px}
+    p{font-size:clamp(15px,2.4vw,18px); color:var(--fg); opacity:.92}
+
+    .cta-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
+    .btn{border:1px solid var(--fg); background:transparent; color:var(--fg); padding:12px 16px; text-transform:uppercase; font-weight:800; letter-spacing:.1em; display:inline-flex; align-items:center; gap:8px}
+    .btn:active{transform:translateY(1px)}
+    .btn.square{border-radius:0}
+
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace}
+    .ip{user-select:all; padding:8px 10px; border:1px dashed var(--line); display:inline-block}
+
+    .gallery{display:grid; grid-template-columns:repeat(12, 1fr); gap:10px}
+    .gallery figure{grid-column: span 6; margin:0; background:color-mix(in oklab, var(--fg) 4%, transparent); border:1px solid var(--line); position:relative; overflow:hidden}
+    .gallery figure img{width:100%; height:clamp(160px,35vw,360px); object-fit:cover; filter:grayscale(1)}
+    .gallery figcaption{padding:10px; font-size:.9rem; color:var(--muted)}
+    .gallery figure::after{content:""; position:absolute; inset:auto 0 0 0; height:30px; background:linear-gradient(to bottom, transparent, color-mix(in oklab, var(--bg) 60%, transparent));}
+    @media (max-width:900px){.gallery figure{grid-column: span 12}}
+
+    footer{padding:40px var(--pad); border-top:1px solid var(--line); color:var(--muted)}
+
+    /* ===== Added: Parallax utilities & scatter text ===== */
+    .parallax{position:relative; overflow:clip}
+    [data-parallax]{will-change: transform; transform:translate3d(0,0,0)}
+    .layer{position:absolute; inset:0; pointer-events:none}
+    .layer.back{background:radial-gradient(1200px 60% at 10% 20%, color-mix(in oklab,var(--fg) 6%, transparent), transparent),
+                               radial-gradient(800px 50% at 90% 10%, color-mix(in oklab,var(--fg) 4%, transparent), transparent)}
+    .layer.mid{background:radial-gradient(600px 40% at 70% 70%, color-mix(in oklab,var(--fg) 5%, transparent), transparent)}
+    .scrim{position:absolute; inset:auto 0 0 0; height:30svh; background:linear-gradient(to bottom, transparent, color-mix(in oklab, var(--bg) 85%, transparent) 60%, var(--bg));}
+
+    .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease}
+    .reveal.in{opacity:1; transform:none}
+
+    .scatter{position:relative; height:120px; margin:10px 0 0; opacity:.9}
+    .chip{position:absolute; padding:6px 10px; border:1px solid var(--line); font-size:.8rem; white-space:nowrap; background:color-mix(in oklab, var(--fg) 3%, transparent)}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="inner wrap">
+      <a class="brand" href="/website/"> 
+        <img alt="Compbuild logo" src="https://static.wixstatic.com/media/5f17e4_c01c92c8b8a04e0c87eb6fd58d7e9a5a~mv2.png/v1/fill/w_256,h_256,al_c,lg_1,q_85,enc_avif,quality_auto/compbuild-mark.png"/>
+        <span>COMPBUILD</span>
+      </a>
+      <nav>
+        <a href="/website/">Home</a>
+        <a href="/website/#projects">Projects</a>
+        <a aria-current="page" href="#top">Alaire</a>
+        <a href="https://modrinth.com/resourcepack/compbuild-textures" target="_blank" rel="noopener">Textures</a>
+      </nav>
+      <button class="toggle" id="themeToggle" aria-label="Toggle theme">Dark/Light</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO with layered parallax -->
+    <section class="hero parallax" aria-label="Alaire hero">
+      <div class="hero-media" aria-hidden="true">
+        <img class="bg" src="https://static.wixstatic.com/media/5f17e4_8007c9f63ab343b2b98fc0dd6818662f~mv2.png/v1/fill/w_1920,h_1080,al_c,q_85,enc_avif,quality_auto/2025-03-18_13_26_33.png" alt="Alaire city screenshot"/>
+        <div class="layer back" data-parallax data-speed="-0.25"></div>
+        <div class="layer mid" data-parallax data-speed="-0.15"></div>
+        <div class="scrim"></div>
+      </div>
+      <div class="copy wrap reveal" data-parallax data-speed="0.06">
+        <div class="eyebrow">A blend of modern and traditional</div>
+        <h1>Welcome to Alaire</h1>
+        <p class="sub">Alaire redefines our image entirely and continues to stand as the best work we have produced to date — constructed with the latest blocks and harnessing new Minecraft features using Compbuild Textures.</p>
+        <div class="cta-row">
+          <a class="btn square" href="https://discord.gg/compbuildredux" target="_blank" rel="noopener">Join Discord →</a>
+          <span class="ip mono" title="Click and copy">IP: PLAY.COMPBUILDREDUX.NET</span>
+        </div>
+        <div class="scatter" aria-hidden="true">
+          <span class="chip" style="left:4%; top:18%" data-parallax data-speed="0.2">#East Coast vibe</span>
+          <span class="chip" style="left:38%; top:5%" data-parallax data-speed="0.12">Compbuild Textures</span>
+          <span class="chip" style="left:72%; top:36%" data-parallax data-speed="0.18">Modern × Historic</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAKING ALAIRE -->
+    <section class="wrap two-col reveal" id="making" data-parallax data-speed="0.04">
+      <div>
+        <div class="kicker">Making Alaire</div>
+        <h2>A test of our work</h2>
+        <p>In its nascent stages, Alaire emerged as a haphazard idea, an ambition to surpass our previous city‑building endeavors whilst retaining our core roots. The planning process was a journey of exploration and trial and error — we wanted to have Alaire as perfect as possible and something that can last for years or maybe even decades.</p>
+        <p>As we envisioned Alaire, we were driven by the desire to infuse it with charm from many architectural styles across North America and Europe while still blending with the map and feeling realistic. The map's natural terrain drew inspiration from the East Coast USA — states like Florida, New York, and Maine helped shape Alaire's natural terrain.</p>
+        <p>Welcome to Alaire! The biggest and most advanced project that Compbuild has ever done. Take a visit to the East Coast USA and explore architecture used across the world — only in Alaire.</p>
+        <p>The entire project utilizes <strong>Compbuild Textures</strong>, a one‑of‑a‑kind pack exclusively designed for Compbuild and its cities. We are committed to maximizing new Minecraft features and fully prepared to leverage our capabilities.</p>
+        <div class="cta-row">
+          <a class="btn square" href="https://modrinth.com/resourcepack/compbuild-textures" target="_blank" rel="noopener">Get Compbuild Textures →</a>
+          <a class="btn square" href="https://www.planetminecraft.com/project/alaire/" target="_blank" rel="noopener">Alaire on PMC →</a>
+        </div>
+      </div>
+      <aside>
+        <figure data-parallax data-speed="0.03">
+          <img alt="Alaire skyline" src="https://static.wixstatic.com/media/5f17e4_8007c9f63ab343b2b98fc0dd6818662f~mv2.png/v1/fill/w_1200,h_800,al_c,q_85,enc_avif,quality_auto/2025-03-18_13_26_33.png"/>
+          <figcaption>City of Alaire — in development on the Compbuild server.</figcaption>
+        </figure>
+      </aside>
+    </section>
+
+    <!-- GALLERY (swap sources as desired) -->
+    <section class="wrap reveal" id="gallery" data-parallax data-speed="0.02">
+      <div class="kicker">Scenes</div>
+      <h2>From the city</h2>
+      <div class="gallery" role="list">
+        <figure role="listitem" data-parallax data-speed="0.05">
+          <img alt="Alaire build" src="https://i.imgur.com/4tWm7fy.jpeg" />
+          <figcaption>Historic district streets.</figcaption>
+        </figure>
+        <figure role="listitem" data-parallax data-speed="0.03">
+          <img alt="Alaire build" src="https://i.imgur.com/2Vq0JvG.jpeg" />
+          <figcaption>Contemporary waterfront.</figcaption>
+        </figure>
+        <figure role="listitem" data-parallax data-speed="0.04">
+          <img alt="Alaire build" src="https://i.imgur.com/6vJ8b2n.jpeg" />
+          <figcaption>Central station axis.</figcaption>
+        </figure>
+        <figure role="listitem" data-parallax data-speed="0.02">
+          <img alt="Alaire build" src="https://i.imgur.com/3Wcqw4c.jpeg" />
+          <figcaption>Residential mid‑rise fabric.</figcaption>
+        </figure>
+      </div>
+      <div class="cta-row" style="margin-top:18px">
+        <span class="ip mono">Visit: Java 1.21.4+ — IP: PLAY.COMPBUILDREDUX.NET — /warp Alaire</span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    ©2025 COMPBUILD REDUX — Not an official Minecraft service. Not affiliated with Mojang or Microsoft.
+  </footer>
+
+  <script>
+    // theme toggle keeps in sync with your main site
+    const root = document.documentElement;
+    const btn = document.getElementById('themeToggle');
+    const apply = t => document.documentElement.setAttribute('data-theme', t);
+    const stored = localStorage.getItem('theme') || 'dark';
+    apply(stored);
+    btn.addEventListener('click', ()=>{ const next = (root.getAttribute('data-theme')==='dark')?'light':'dark'; apply(next); localStorage.setItem('theme', next); });
+
+    // ===== Enhanced parallax & reveal (consistent + minimal) =====
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const parallaxNodes = prefersReduced ? [] : Array.from(document.querySelectorAll('[data-parallax]'));
+    const revealNodes = Array.from(document.querySelectorAll('.reveal'));
+
+    // Reveal on first view
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    }, { rootMargin: '0px 0px -10%' });
+    revealNodes.forEach(n=> io.observe(n));
+
+    // Parallax loop — uses rAF for buttery motion and checks viewport proximity
+    let lastY = window.scrollY;
+    const tick = ()=>{
+      const y = window.scrollY;
+      if(Math.abs(y-lastY) > 0.2){
+        const vh = innerHeight;
+        parallaxNodes.forEach(n=>{
+          const speed = parseFloat(n.getAttribute('data-speed')||0);
+          const r = n.getBoundingClientRect();
+          if(r.top < vh*1.2 && r.bottom > -vh*0.2){
+            const offset = (y + r.top + r.height*0.5) * speed * -0.12; // gentle
+            n.style.transform = `translate3d(0, ${offset.toFixed(2)}px, 0)`;
+          }
+        });
+        lastY = y;
+      }
+      requestAnimationFrame(tick);
+    };
+    if(!prefersReduced) requestAnimationFrame(tick);
+
+    // Subtle parallax on hero BG (kept from previous but slightly stronger)
+    const hero = document.querySelector('.hero');
+    const bg = document.querySelector('.hero .bg');
+    addEventListener('scroll', () => {
+      const r = hero.getBoundingClientRect();
+      const progress = Math.min(1, Math.max(0, ( -r.top ) / (r.height || 1)));
+      bg.style.setProperty('--y', (progress * -36) + 'px');
+    }, {passive:true});
+
+    // Pointer tilt for gallery cards (fun but subtle)
+    const cards = document.querySelectorAll('.gallery figure');
+    cards.forEach(card=>{
+      card.addEventListener('pointermove', (e)=>{
+        const b = card.getBoundingClientRect();
+        const cx = (e.clientX - b.left) / b.width - 0.5;
+        const cy = (e.clientY - b.top) / b.height - 0.5;
+        card.style.transform = `perspective(800px) rotateX(${cy*-2}deg) rotateY(${cx*2}deg)`;
+      });
+      card.addEventListener('pointerleave', ()=>{ card.style.transform='none'; });
+    });
+  </script>
+</body>
+</html>
