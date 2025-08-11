@@ -3,147 +3,381 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Compbuild Catalog</title>
+  <title>COMPBUILD — Unified Catalog</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..900&display=swap" rel="stylesheet">
   <style>
-    :root{ --bg:#ffffff; --fg:#0a0a0a; --muted:#6b6b6b; --line: color-mix(in oklab, var(--fg) 12%, transparent); --card: color-mix(in oklab, var(--fg) 5%, transparent); --max:1280px; --pad:clamp(16px,3vw,40px); --accent:#1f8cff; }
-    [data-theme="dark"]{ --bg:#0a0a0a; --fg:#f5f5f5; --muted:#a4a4a4; --line: color-mix(in oklab, var(--fg) 16%, transparent); --card: color-mix(in oklab, var(--fg) 6%, transparent); }
-    *{box-sizing:border-box}
-    body{margin:0; font-family:"Manrope",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--fg)}
-    a{color:inherit; text-decoration:none}
-    img{display:block; max-width:100%; height:auto}
+    /* ---------- THEME (matches site) ---------- */
+    :root{
+      --bg:#ffffff; --fg:#0a0a0a; --muted:#6b6b6b; --line: color-mix(in oklab, var(--fg) 12%, transparent);
+      --card: color-mix(in oklab, var(--fg) 5%, transparent); --max:1280px; --pad:clamp(16px,3vw,40px);
+      --accent:#1f8cff; --pink:#ff0675; --violet:#7c3cff;
+    }
+    [data-theme="dark"]{
+      --bg:#0a0a0a; --fg:#f5f5f5; --muted:#a4a4a4; --line: color-mix(in oklab, var(--fg) 16%, transparent);
+      --card: color-mix(in oklab, var(--fg) 6%, transparent);
+    }
 
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:"Manrope",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--fg);}
+    a{color:inherit; text-decoration:none}
+    img{display:block; max-width:100%; height:auto;}
+
+    /* ---------- LAYOUT ---------- */
     .wrap{max-width:var(--max); margin-inline:auto; padding-inline:var(--pad)}
     .stack{display:grid; gap:clamp(16px,2vw,28px)}
 
-    /* NAV */
-    .nav{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(8px); background: color-mix(in oklab, var(--bg) 85%, transparent); border-bottom:1px solid var(--line)}
+    /* ---------- NAV ---------- */
+    .nav{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(8px);
+         background: color-mix(in oklab, var(--bg) 85%, transparent); border-bottom:1px solid var(--line)}
     .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px var(--pad)}
     .brand{display:flex; align-items:center; gap:10px}
     .brand img.logo{width:28px; height:28px}
-    .nav-links{display:flex; gap:18px; align-items:center}
-    .btn{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line); padding:10px 14px; border-radius:0; background:transparent; color:inherit; cursor:pointer}
-    .btn:active{transform:translateY(1px)}
-    .btn.arrow::after{content:"→"; transition:transform .18s ease}
-    .btn.arrow:hover::after{transform:translateX(2px)}
+    .nav-links{display:flex; gap:20px; align-items:center}
+    .nav-links a{opacity:.9}
+    .nav-links a:hover{opacity:1}
 
-    /* HERO */
-    header.hero{border-bottom:1px solid var(--line); position:relative; overflow:hidden}
-    .hero .bg{position:absolute; inset:-4%; width:108%; height:108%; object-fit:cover; filter:contrast(1.05) saturate(1.02); opacity:.55; transform:translateY(var(--y,0px))}
-    .hero .scrim{position:absolute; inset:auto 0 0 0; height:28svh; background:linear-gradient(to bottom, transparent, color-mix(in oklab, var(--bg) 85%, transparent) 60%, var(--bg))}
-    .hero .inner{position:relative; z-index:1; padding:clamp(36px,9vw,110px) var(--pad)}
+    /* ---------- BUTTONS ---------- */
+    .btn{display:inline-flex; align-items:center; gap:10px; border:1px solid var(--line); padding:10px 14px; border-radius:0; position:relative; isolation:isolate; cursor:pointer; background:transparent; color:inherit}
+    .btn:hover{background:var(--card)}
+    .btn.arrow::after{content:"→"; display:inline-block; transform:translateX(0); transition:transform .2s ease}
+    .btn.arrow:hover::after{transform:translateX(3px)}
+
+    /* ---------- PAGE HEADER ---------- */
+    .page-hero{padding: clamp(36px, 6vw, 80px) 0; border-bottom:1px solid var(--line)}
     .eyebrow{font-size:.9rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
-    h1{font-size:clamp(36px,6.6vw,84px); line-height:1.02; margin:8px 0 8px}
-    p.lead{color:var(--muted)}
+    h1{font-size:clamp(36px,6vw,64px); line-height:1.02; margin:8px 0 6px}
+    p.lead{color:var(--muted); font-size:clamp(15px,1.2vw,18px)}
 
-    /* CARDS */
-    section{padding: clamp(60px, 10vw, 140px) 0; border-bottom:1px solid var(--line)}
-    .grid{display:grid; gap:18px; grid-template-columns: repeat(12, 1fr)}
-    .card{grid-column:span 12; border:1px solid var(--line); background:var(--card); display:flex; flex-direction:column; overflow:hidden}
-    @media(min-width:800px){ .card{grid-column:span 4} }
-    .thumb{aspect-ratio: 16/10; background:color-mix(in oklab, var(--fg) 4%, transparent); overflow:hidden}
-    .thumb img{width:100%; height:100%; object-fit:cover}
-    .body{padding:16px}
-    .body h3{margin:4px 0 6px}
+    /* ---------- CONTROLS (app-like) ---------- */
+    .controls{display:grid; grid-template-columns:1fr auto; gap:12px; margin-top:18px}
+    @media (max-width:720px){ .controls{grid-template-columns:1fr} }
+    .search{display:flex; align-items:center; gap:10px; border:1px solid var(--line); background:var(--card); padding:10px 12px}
+    .search input{flex:1; background:transparent; border:0; outline:none; color:inherit; font-size:14px}
+    .toolrow{display:flex; gap:8px; align-items:center; justify-content:flex-end; flex-wrap:wrap}
+
+    .filters{display:grid; gap:8px; margin-top:8px}
+    .barlabel{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+    .chips{display:flex; flex-wrap:wrap; gap:8px}
+    .chip{padding:8px 12px; border:1px solid var(--line); background:var(--bg); color:var(--muted)}
+    .chip[aria-pressed="true"]{background:var(--card); color:var(--fg)}
+
+    /* ---------- GRID / CARDS ---------- */
+    .grid{display:grid; gap:16px; grid-template-columns: repeat(12, 1fr); padding: clamp(36px, 6vw, 56px) 0}
+    .cols-3{grid-column:span 12}
+    @media (min-width:700px){.cols-3{grid-column:span 4}}
+
+    .card{border:1px solid var(--line); border-radius:0; overflow:hidden; display:flex; flex-direction:column; background:var(--card)}
+    .card-media{aspect-ratio: 1 / 1; overflow:hidden; background:var(--bg)}
+    .card-media img{width:100%; height:100%; object-fit:cover}
+    .card-body{padding:12px 12px 14px}
+    .card h3{margin:2px 0 6px; font-size:1.02rem}
     .muted{color:var(--muted)}
+    .row{display:flex; gap:8px; align-items:center; margin-top:8px; flex-wrap:wrap}
+    .mono{font:700 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; padding:6px 8px; border:1px dashed var(--line); color:inherit; background:color-mix(in oklab, var(--bg) 60%, transparent)}
 
-    /* REVEAL */
-    .reveal{opacity:0; translate:0 10px; transition:opacity .6s ease, translate .6s ease}
-    .reveal.in{opacity:1; translate:0 0}
+    /* ---------- DRAWER (app-like details) ---------- */
+    dialog#drawer{border:0; padding:0; width:100%; max-width:960px; background:transparent}
+    .drawer-overlay{position:fixed; inset:0; background:color-mix(in oklab, var(--bg) 40%, transparent)}
+    .drawer{position:fixed; right:0; top:0; bottom:0; width:min(960px, 96vw); background:var(--bg); border-left:1px solid var(--line); display:grid; grid-template-rows:auto 1fr auto; animation:slideIn .18s ease}
+    @keyframes slideIn{from{transform:translateX(8px); opacity:.6} to{transform:none; opacity:1}}
+    .drawer header, .drawer footer{padding:12px var(--pad); border-bottom:1px solid var(--line)}
+    .drawer footer{border-top:1px solid var(--line); border-bottom:0}
+    .drawer .media{padding:14px var(--pad)}
 
-    footer{padding:38px var(--pad); color:var(--muted)}
+    /* ---------- FOOTER ---------- */
+    footer.site{padding:38px var(--pad); color:var(--muted); border-top:1px solid var(--line)}
+
+    /* ---------- TOAST ---------- */
+    .toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(10px); border:1px solid var(--line); background:var(--bg); padding:10px 14px; opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;}
+    .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
   </style>
 </head>
 <body>
   <!-- NAV -->
-  <div class="nav">
+  <header class="nav">
     <div class="nav-inner wrap">
-      <a href="/website/" class="brand" aria-label="Compbuild home">
-        <img class="logo" src="https://static.wixstatic.com/media/5f17e4_8d64bc05672c4787bcc7a5b3220e4303~mv2.png/v1/fill/w_53,h_53,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/5f17e4_8d64bc05672c4787bcc7a5b3220e4303~mv2.png" alt="Compbuild" />
+      <a href="#top" class="brand" aria-label="Compbuild home">
+        <img class="logo" src="https://static.wixstatic.com/media/5f17e4_8d64bc05672c4787bcc7a5b3220e4303~mv2.png/v1/fill/w_53,h_53,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/5f17e4_8d64bc05672c4787bcc7a5b3220e4303~mv2.png" alt="Compbuild" width="28" height="28" />
       </a>
       <nav class="nav-links">
-        <a href="/website/#about">About</a>
-        <a href="/website/#projects">Projects</a>
-        <a href="/website/#pack">Textures</a>
+        <a href="/">Home</a>
+        <a href="/projects">Projects</a>
+        <a href="/catalog">Catalog</a>
         <button id="themeToggle" class="btn arrow" aria-label="Toggle theme">Dark/Light</button>
       </nav>
     </div>
-  </div>
-
-  <!-- HERO -->
-  <header class="hero">
-    <img class="bg" src="https://cdn.discordapp.com/attachments/796149186307293244/1362182024412270672/2025-04-16_16.38.05.png?ex=6899bb9e&is=68986a1e&hm=e5779ea107fd9c73ba314220217b2b5a918b44c4f1e6f1c083035ffbbd46a531&" alt="Catalog hero" />
-    <div class="scrim"></div>
-    <div class="inner wrap">
-      <div class="eyebrow">Catalog</div>
-      <h1 class="reveal">Choose a category</h1>
-      <p class="lead reveal">Pick a catalog to browse. Each opens a dedicated, biomes‑only browser with search, quick preview, and one‑click copy.</p>
-    </div>
   </header>
 
-  <!-- MENU CARDS -->
-  <section>
-    <div class="wrap">
-      <div class="grid">
-        <a class="card reveal" href="catalog-biome-models.html" data-slug="biomemodels">
-          <div class="thumb"><img src="https://static.wixstatic.com/media/5f17e4_a8455479d35e4ddaadecbb0598b851d2~mv2.png/v1/fill/w_600,h_337,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/5f17e4_a8455479d35e4ddaadecbb0598b851d2~mv2.png" alt="Biome Models" /></div>
-          <div class="body">
-            <h3>Biome Models</h3>
-            <div class="muted">Blocks with biome variants & model overrides</div>
-          </div>
-        </a>
-        <a class="card reveal" href="catalog-color-blocks.html" data-slug="color">
-          <div class="thumb"><img src="https://static.wixstatic.com/media/5f17e4_07a11c25c70246259ffbab0016cc0a7c~mv2.png/v1/fill/w_600,h_337,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/5f17e4_07a11c25c70246259ffbab0016cc0a7c~mv2.png" alt="Color Blocks" /></div>
-          <div class="body">
-            <h3>Color Blocks</h3>
-            <div class="muted">Tinted materials & palette sets</div>
-          </div>
-        </a>
-        <a class="card reveal" href="catalog-flora.html" data-slug="flora">
-          <div class="thumb"><img src="https://cdn.discordapp.com/attachments/796149186307293244/1398385069420314624/2025-07-25_13.11.05.png?ex=689a4315&is=6898f195&hm=c7e2f1b37f1bf444a71fd7e5e6dbc543acd0178b185e183493f1280c23e3b469&" alt="Flora" /></div>
-          <div class="body">
-            <h3>Flora</h3>
-            <div class="muted">Plants, trees & environment</div>
-          </div>
-        </a>
+  <!-- PAGE HEADER -->
+  <section class="page-hero" id="top">
+    <div class="wrap stack">
+      <span class="eyebrow">Catalog</span>
+      <h1>Unified Catalog</h1>
+      <p class="lead">Color Blocks, Flora, and Biome/Blockstate Models — searchable, filterable, copy‑friendly.</p>
+
+      <div class="controls" role="search">
+        <label class="search" aria-label="Search items">
+          <input id="q" type="search" placeholder="Search name, group, or section…" autocomplete="off" />
+        </label>
+        <div class="toolrow">
+          <button class="btn" id="shuffleBtn" title="Shuffle items">Shuffle</button>
+          <button class="btn" id="resetBtn" title="Reset filters">Reset</button>
+        </div>
       </div>
+
+      <div class="filters">
+        <div>
+          <div class="barlabel">Sections</div>
+          <div class="chips" id="chipsSection" role="toolbar" aria-label="Sections"></div>
+        </div>
+        <div>
+          <div class="barlabel">Groups</div>
+          <div class="chips" id="chipsGroup" role="toolbar" aria-label="Groups"></div>
+        </div>
+      </div>
+
+      <div class="muted" id="count">&nbsp;</div>
     </div>
   </section>
 
-  <footer class="wrap">
-    <div class="stack muted">©2025 COMPBUILD REDUX — Not an official Minecraft service. Not affiliated with Mojang or Microsoft.</div>
+  <!-- GRID -->
+  <main class="wrap">
+    <section class="grid" id="grid" aria-live="polite"></section>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <div class="muted">©2025 COMPBUILD REDUX — Not an official Minecraft service. Not affiliated with Mojang or Microsoft.</div>
+    </div>
   </footer>
 
+  <!-- Drawer (app-like details) -->
+  <dialog id="drawer">
+    <div class="drawer-overlay" onclick="closeDrawer(event)"></div>
+    <div class="drawer" role="dialog" aria-modal="true">
+      <header class="stack">
+        <strong id="dName">Preview</strong>
+        <span class="muted" id="dGroup"></span>
+      </header>
+      <div class="media" id="dMedia"></div>
+      <footer>
+        <button class="btn" id="dCopy">Copy key</button>
+        <button class="btn arrow" onclick="document.getElementById('drawer').close()">Close</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite">Copied!</div>
+
   <script>
+    // -------------------- DATA --------------------
+    const ITEMS = [
+      // ===== Existing: Color Blocks =====
+      {section:"Color Blocks", name:"savanna", group:"Color Blocks", url:"https://static.wixstatic.com/media/5f17e4_cf0b2e5d81d743f4bb7c281731f5cdee~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/1.png"},
+      {section:"Color Blocks", name:"deep_ocean", group:"Color Blocks", url:"https://static.wixstatic.com/media/5f17e4_af0b79bc06a64acba22933e4aabe138f~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/8.png"},
+      {section:"Color Blocks", name:"deep_cold_ocean", group:"Color Blocks", url:"https://static.wixstatic.com/media/5f17e4_7ad3510e2a7c4a5eb7f43feac3bfb00e~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/12.png"},
+      {section:"Color Blocks", name:"windswept_forest", group:"Color Blocks", url:"https://static.wixstatic.com/media/5f17e4_1fe78226c04e471896a2b075393b081e~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/6.png"},
+      {section:"Color Blocks", name:"stony_shore", group:"Color Blocks", url:"https://static.wixstatic.com/media/5f17e4_bbf0750b012a4e579f6a944411b5b850~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/2.png"},
+      {section:"Color Blocks", name:"ice_spikes", group:"Color Blocks", url:"https://static.wixstatic.com/media/5f17e4_f6dabea588ca4f60986fd323fb801c2d~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/9.png"},
+      {section:"Color Blocks", name:"old_growth_pine_taiga", group:"Color Blocks", url:"https://static.wixstatic.com/media/5f17e4_ba3c435fa44f4a8e97d1845ced6df695~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/13.png"},
+      {section:"Color Blocks", name:"bamboo_jungle", group:"Color Blocks", url:"https://static.wixstatic.com/media/5f17e4_09a4e7b55fd84f19a315a0432428bc5d~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/5.png"},
+      {section:"Color Blocks", name:"lukewarm_ocean", group:"Color Blocks", url:"https://static.wixstatic.com/media/5f17e4_a550bd3711fb4b4a9f1a85aba4b5b1b6~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/3.png"},
+      {section:"Color Blocks", name:"deep_lukewarm_ocean", group:"Color Blocks", url:"https://static.wixstatic.com/media/5f17e4_872736bdb8b24225ab9abcde88baef7c~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/10.png"},
+      {section:"Color Blocks", name:"cherry_grove", group:"Color Blocks", url:"https://static.wixstatic.com/media/5f17e4_dd6809b77dfd4ba6a705eca7a9383739~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/14.png"},
+      {section:"Color Blocks", name:"desert", group:"Color Blocks", url:"https://static.wixstatic.com/media/5f17e4_362d0de6128a4f458603da84e796146c~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/4.png"},
+      {section:"Color Blocks", name:"jagged_peaks", group:"Color Blocks", url:"https://static.wixstatic.com/media/5f17e4_6265d187ebe1422eac37269fec92b2da~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/11.png"},
+      {section:"Color Blocks", name:"sunflower_plains", group:"Color Blocks", url:"https://static.wixstatic.com/media/5f17e4_7e22b1124c7c46de93a7277a4fb04c97~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/7.png"},
+      {section:"Color Blocks", name:"beach", group:"Wool Colors", url:"https://static.wixstatic.com/media/5f17e4_03d54447db184169992bc1289706ef3b~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/6.png"},
+      {section:"Color Blocks", name:"bamboo_jungle", group:"Wool Colors", url:"https://static.wixstatic.com/media/5f17e4_1f7a9f75c54449e8b8fa21e15219443d~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/7.png"},
+      {section:"Color Blocks", name:"swamp", group:"Wool Colors", url:"https://static.wixstatic.com/media/5f17e4_1d0075c35d00466fa5513d91d1bca8da~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/8.png"},
+      {section:"Color Blocks", name:"windswept_savanna", group:"Wool Colors", url:"https://static.wixstatic.com/media/5f17e4_ddc919f990074c7ca70e615d7cf81a32~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/9.png"},
+      {section:"Color Blocks", name:"stony_peaks", group:"Wool Colors", url:"https://static.wixstatic.com/media/5f17e4_487f74f0a4fc48cc8791518b117d2af3~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/11.png"},
+      {section:"Color Blocks", name:"wooded_badlands", group:"Wool Colors", url:"https://static.wixstatic.com/media/5f17e4_5929c4e0acc74864a47c7fd3d74a5b42~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/15.png"},
+      {section:"Color Blocks", name:"old_growth_birch_forest", group:"Wool Colors", url:"https://static.wixstatic.com/media/5f17e4_560d2b47d170467b94273ab48555bf7b~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/12.png"},
+      {section:"Color Blocks", name:"birch_forest", group:"Wool Colors", url:"https://static.wixstatic.com/media/5f17e4_5dff106febe24bdb9af0f8e05e139ac1~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/13.png"},
+      {section:"Color Blocks", name:"mangrove_swamp", group:"Wool Colors", url:"https://static.wixstatic.com/media/5f17e4_c4bddd5395e44c08a2fd4a43441632b0~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/16.png"},
+      {section:"Color Blocks", name:"windswept_gravelly_hills", group:"Wool Colors", url:"https://static.wixstatic.com/media/5f17e4_d1cf0d0284174f75a8cd358e57f222de~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/17.png"},
+      {section:"Color Blocks", name:"badlands", group:"Wool Colors", url:"https://static.wixstatic.com/media/5f17e4_23b7529f760b4476b2d96813bb33ad05~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/14.png"},
+      {section:"Color Blocks", name:"cold_ocean", group:"Wool Colors", url:"https://static.wixstatic.com/media/5f17e4_7b0d8a272f7f43adb50e30dc2c9c7b1f~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/18.png"},
+      {section:"Color Blocks", name:"No_Biome", group:"Oak & Spruce Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_4b1067a21f9d418799426218ceb307ac~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/0.png"},
+      {section:"Color Blocks", name:"snowy_slopes", group:"Oak & Spruce Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_7f5e777688c341059b530d685f825ee6~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/4.png"},
+      {section:"Color Blocks", name:"mangrove_swamp", group:"Oak & Spruce Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_b597488cb6ca45c397cdcfa6f964ca0f~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/8.png"},
+      {section:"Color Blocks", name:"old_growth_spruce_taiga", group:"Oak & Spruce Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_9faffeaa94e5437fa19a2fd0dee6ae58~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/1.png"},
+      {section:"Color Blocks", name:"jungle", group:"Oak & Spruce Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_f02afb2372f94280962d58fe5ed2245d~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/5.png"},
+      {section:"Color Blocks", name:"cherry_grove", group:"Oak & Spruce Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_0d754b16cc474e30acb5d694bb68bac5~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/9.png"},
+      {section:"Color Blocks", name:"birch_forest", group:"Oak & Spruce Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_efc6f8275eb24445b45fd2379d044b63~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/2.png"},
+      {section:"Color Blocks", name:"wooded_badlands", group:"Oak & Spruce Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_f1a8739958a440289d5ea9a323357fa2~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/6.png"},
+      {section:"Color Blocks", name:"flower_forest", group:"Oak & Spruce Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_76dacf6bc00745d3aa0520cedf4da4db~mv2.png/v1/fill/w_256,h_372,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/image.png"},
+      {section:"Color Blocks", name:"savanna_plateau", group:"Oak & Spruce Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_ec3dd50b894e47de8d82857e3b7140ee~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/3.png"},
+      {section:"Color Blocks", name:"meadow", group:"Oak & Spruce Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_0de6feb406704636afbb6a0799a7bc0a~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/7.png"},
+      {section:"Color Blocks", name:"cold_ocean", group:"Oak & Spruce Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_556e722f3cfb439fbebdfd7b47142f7a~mv2.png/v1/fill/w_256,h_408,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/image.png"},
+      {section:"Color Blocks", name:"No_Biome", group:"Birch Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_baa1a163579b40968aa37304533fcbd9~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/0.png"},
+      {section:"Color Blocks", name:"river", group:"Birch Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_ee2ed4e105044bfeaa378e875cb2af8a~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/1.png"},
+      {section:"Color Blocks", name:"windswept_forest", group:"Birch Trapdoor", url:"https://static.wixstatic.com/media/5f17e4_d34c1b046a0d4162acf75af3b99797f5~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/2.png"},
+      {section:"Color Blocks", name:"river", group:"Yellow Concrete", url:"https://static.wixstatic.com/media/5f17e4_00c77be7f30643b0980a1a06b059b18e~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/17.png"},
+      {section:"Color Blocks", name:"windswept_hills", group:"White Concrete", url:"https://static.wixstatic.com/media/5f17e4_0f53683ccd12424da37ab1b265f8aa71~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/17.png"},
+
+      // ===== Flora (from catalog-flora) =====
+      {section:"Flora", name:"mixed_small_flowers", group:"Flowers", url:"https://static.wixstatic.com/media/5f17e4_884ca82447f64bd4b4002e7f47a97015~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/mixed_small_flowers.png"},
+      {section:"Flora", name:"small_red_flowers", group:"Flowers", url:"https://static.wixstatic.com/media/5f17e4_022a929448b24ea5a503d0f0967356fa~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/small_red_flowers.png"},
+      {section:"Flora", name:"california_poppy", group:"Flowers", url:"https://static.wixstatic.com/media/5f17e4_aa8409c6086747bcaf04f27ec94d5763~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/california_poppy.png"},
+      {section:"Flora", name:"blanket_flowers", group:"Flowers", url:"https://static.wixstatic.com/media/5f17e4_18bd220ed1ae43f4a7d67346d85bf55e~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/blanket_flowers.png"},
+      {section:"Flora", name:"fence_wall_0", group:"Fences & Walls", url:"https://static.wixstatic.com/media/5f17e4_aac4b474e7cc4943ba048892f357e096~mv2.png/v1/fill/w_256,h_256,al_c,q_85,enc_avif,quality_auto/0.png"},
+      {section:"Flora", name:"fence_wall_1", group:"Fences & Walls", url:"https://static.wixstatic.com/media/5f17e4_8c01cf03ddf24221a2395c2f8eb14ee8~mv2.png/v1/fill/w_256,h_256,al_c,q_85,enc_avif,quality_auto/1.png"},
+      {section:"Flora", name:"fence_wall_2", group:"Fences & Walls", url:"https://static.wixstatic.com/media/5f17e4_5e25aefc59fc42de874c130460bc15af~mv2.png/v1/fill/w_256,h_256,al_c,q_85,enc_avif,quality_auto/2.png"},
+
+      // ===== Biome Models (from catalog-biome-models) =====
+      {section:"Biome Models", name:"dead_tube_coral_fan_no_biome", group:"Dead Tube Coral Fan", url:"https://static.wixstatic.com/media/5f17e4_738c515719b44b4b83fe1807fab3acec~mv2.png/v1/fill/w_512,h_512,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/image.png"},
+      {section:"Biome Models", name:"dead_tube_coral_fan_windswept_forest", group:"Dead Tube Coral Fan", url:"https://static.wixstatic.com/media/5f17e4_77bdf43247d44caca7e1ba2a14b21835~mv2.png/v1/fill/w_512,h_512,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/image.png"},
+      {section:"Biome Models", name:"dead_tube_coral_fan_jungle", group:"Dead Tube Coral Fan", url:"https://static.wixstatic.com/media/5f17e4_6afc1008725542d68b0dfa5d32d9bbbc~mv2.png/v1/fill/w_512,h_512,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/image.png"},
+      {section:"Biome Models", name:"dead_tube_coral_no_biome", group:"Dead Tube Coral", url:"https://static.wixstatic.com/media/5f17e4_cab59837454045f589f3a0c605b55a70~mv2.png/v1/fill/w_512,h_512,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/image.png"},
+      {section:"Biome Models", name:"dead_tube_coral_windswept_forest", group:"Dead Tube Coral", url:"https://static.wixstatic.com/media/5f17e4_50df7a20813c424f8073ac69408e665e~mv2.png/v1/fill/w_512,h_512,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/image.png"},
+      {section:"Biome Models", name:"dead_tube_coral_jungle", group:"Dead Tube Coral", url:"https://static.wixstatic.com/media/5f17e4_0167556f08e640bf90661214b5a45b48~mv2.png/v1/fill/w_512,h_512,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/image.png"},
+
+      // ===== Blockstate Models (from catalog-biome-models) =====
+      {section:"Blockstate Models", name:"repeater_off_delay_1", group:"Repeaters (off)", url:"https://static.wixstatic.com/media/5f17e4_1afe3e1ca99e49c984ef98666535adfb~mv2.png/v1/fill/w_512,h_512,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/image.png"},
+      {section:"Blockstate Models", name:"repeater_off_delay_2", group:"Repeaters (off)", url:"https://static.wixstatic.com/media/5f17e4_959cc16066bc4162aa8cb2fbc412c23f~mv2.png/v1/fill/w_512,h_512,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/image.png"},
+      {section:"Blockstate Models", name:"repeater_off_delay_3", group:"Repeaters (off)", url:"https://static.wixstatic.com/media/5f17e4_21b2486ea6db4cfda8a903013cd16a73~mv2.png/v1/fill/w_512,h_512,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/image.png"},
+      {section:"Blockstate Models", name:"repeater_off_delay_4", group:"Repeaters (off)", url:"https://static.wixstatic.com/media/5f17e4_0d0805b99cca469d8073fb82f92db902~mv2.png/v1/fill/w_512,h_512,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/image.png"}
+    ];
+
+    // -------------------- APP UI --------------------
+    const $grid = document.getElementById('grid');
+    const $q = document.getElementById('q');
+    const $chipsSection = document.getElementById('chipsSection');
+    const $chipsGroup = document.getElementById('chipsGroup');
+    const $count = document.getElementById('count');
+
+    const SECTIONS = Array.from(new Set(ITEMS.map(i=>i.section)));
+    let activeSection = 'All';
+    const activeGroups = new Set();
+
+    function norm(s){ return (s||'').toLowerCase().replace(/[_\-]+/g,' ').trim(); }
+
+    // Build chips
+    function renderSectionChips(){
+      $chipsSection.innerHTML='';
+      ['All', ...SECTIONS].forEach(sec=>{
+        const b=document.createElement('button'); b.className='chip'; b.type='button'; b.textContent=sec;
+        b.setAttribute('aria-pressed', String(sec===activeSection));
+        b.onclick=()=>{ activeSection = sec; activeGroups.clear(); renderGroupChips(); render(); };
+        $chipsSection.appendChild(b);
+      });
+    }
+    function renderGroupChips(){
+      $chipsGroup.innerHTML='';
+      const groups = Array.from(new Set(ITEMS.filter(it=> activeSection==='All' ? true : it.section===activeSection).map(i=>i.group)));
+      groups.forEach(g=>{
+        const b=document.createElement('button'); b.className='chip'; b.type='button'; b.textContent=g;
+        b.setAttribute('aria-pressed', String(activeGroups.has(g)));
+        b.onclick=()=>{ if(activeGroups.has(g)) activeGroups.delete(g); else activeGroups.add(g); b.setAttribute('aria-pressed', String(activeGroups.has(g))); render(); };
+        $chipsGroup.appendChild(b);
+      });
+    }
+
+    function filtered(){
+      const query = norm($q.value);
+      let list = ITEMS.slice();
+      if(activeSection!=='All') list = list.filter(it=> it.section===activeSection);
+      if(activeGroups.size) list = list.filter(it=> activeGroups.has(it.group));
+      if(query) list = list.filter(it=> (norm(it.name)+' '+norm(it.group)+' '+norm(it.section)).includes(query));
+      // stable sort by name
+      return list.sort((a,b)=> a.name.localeCompare(b.name));
+    }
+
+    function render(){
+      const list = filtered();
+      $grid.innerHTML = '';
+      list.forEach(it=>{
+        const card = document.createElement('article');
+        card.className='card cols-3';
+        card.innerHTML = `
+          <a class="card-media" role="button" tabindex="0" aria-label="Open ${it.name}">
+            <img loading="lazy" alt="${it.name}" src="${it.url}" onerror="this.style.display='none'; this.parentElement.textContent='[image]'">
+          </a>
+          <div class="card-body">
+            <h3>${it.name.replaceAll('_',' ')}</h3>
+            <div class="muted">${it.section} · ${it.group}</div>
+            <div class="row">
+              <code class="mono">${it.name}</code>
+              <button class="btn" data-copy="${it.name}">Copy</button>
+            </div>
+          </div>`;
+        const media = card.querySelector('.card-media');
+        media.addEventListener('click', ()=> openDrawer(it));
+        media.addEventListener('keypress', (e)=>{ if(e.key==='Enter') openDrawer(it); });
+        card.querySelector('[data-copy]').addEventListener('click', (e)=>{ e.stopPropagation(); copyText(it.name); });
+        $grid.appendChild(card);
+      });
+      $count.textContent = `${list.length} shown · ${ITEMS.length} total`;
+    }
+
+    // Drawer
+    const drawer = document.getElementById('drawer');
+    const dName = document.getElementById('dName');
+    const dGroup = document.getElementById('dGroup');
+    const dMedia = document.getElementById('dMedia');
+    const dCopy = document.getElementById('dCopy');
+
+    function openDrawer(it){
+      dName.textContent = it.name.replaceAll('_',' ');
+      dGroup.textContent = `${it.section} · ${it.group}`;
+      dMedia.innerHTML = `<img src="${it.url}" alt="${it.name}" style="max-width:100%; height:auto">`;
+      dCopy.onclick = ()=> copyText(it.name);
+      if(!drawer.open) drawer.showModal();
+    }
+    function closeDrawer(e){ if(e.target.classList.contains('drawer-overlay')) drawer.close(); }
+
+    // Copy to clipboard
+    const toast = document.getElementById('toast');
+    function showToast(){
+      toast.classList.add('show');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(()=> toast.classList.remove('show'), 1400);
+    }
+    function copyText(str){
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(str).then(showToast);
+      } else {
+        const ta = document.createElement('textarea'); ta.value = str; document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); showToast(); } finally { ta.remove(); }
+      }
+    }
+
     // Theme toggle + persist
-    const root = document.documentElement; const toggle = document.getElementById('themeToggle');
-    const saved = localStorage.getItem('theme'); if(saved){ root.setAttribute('data-theme', saved); }
-    toggle?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('theme');
+    if(saved){ root.setAttribute('data-theme', saved); }
+    toggle.addEventListener('click', () => {
       const cur = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       root.setAttribute('data-theme', cur);
       localStorage.setItem('theme', cur);
     });
 
-    // Reveal-on-scroll
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} })
-    }, {threshold:0.12});
-    document.querySelectorAll('.reveal').forEach((el,i)=>{ el.style.transitionDelay = (i*40)+'ms'; io.observe(el); });
+    // Search input debounce
+    let t; $q.addEventListener('input', ()=>{ clearTimeout(t); t=setTimeout(render, 80); });
 
-    // Parallax hero (no fancy APIs)
-    const hero = document.querySelector('.hero'); const bg = document.querySelector('.hero .bg');
-    addEventListener('scroll', ()=>{ const r = hero.getBoundingClientRect(); const p = Math.min(1, Math.max(0, (-r.top)/(r.height||1))); bg.style.setProperty('--y', (p*-36)+'px'); }, {passive:true});
+    // Tools
+    document.getElementById('shuffleBtn').addEventListener('click', ()=>{ ITEMS.sort(()=>Math.random()-0.5); render(); });
+    document.getElementById('resetBtn').addEventListener('click', ()=>{
+      $q.value=''; activeSection='All'; activeGroups.clear(); renderSectionChips(); renderGroupChips(); render();
+    });
 
-    // --- Tiny diagnostics (kept simple; no unicode property escapes) ---
-    (function runTests(){
-      const cards = document.querySelectorAll('.card');
-      const eq=(a,b,msg)=>{ if(a!==b) console.error('[Menu Test FAIL]', msg, a, '≠', b); else console.log('[Menu Test OK]', msg); };
-      eq(cards.length, 3, 'three menu cards present');
-      const slugs = Array.from(cards).map(c=>c.getAttribute('data-slug')).join(',');
-      eq(slugs.includes('biomemodels') && slugs.includes('color') && slugs.includes('flora'), true, 'all slugs set');
-    })();
+    // -------------------- Smoke tests --------------------
+    console.assert(Array.isArray(ITEMS) && ITEMS.length>0, 'ITEMS must be non-empty');
+    console.assert(new Set(ITEMS.map(i=>i.section)).has('Color Blocks'), 'Color Blocks section present');
+    console.assert(new Set(ITEMS.map(i=>i.section)).has('Flora'), 'Flora section present');
+    console.assert(new Set(ITEMS.map(i=>i.section)).has('Biome Models'), 'Biome Models section present');
+
+    // boot
+    renderSectionChips();
+    renderGroupChips();
+    render();
   </script>
 </body>
 </html>
+
