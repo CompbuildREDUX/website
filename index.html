@@ -83,12 +83,9 @@
     .ring > .box{ background:var(--bg); }
 
     /* ---------- PACK FEATURES (new) ---------- */
-    /* compact section */
     #pack{padding: clamp(32px,5vw,84px) 0}
-    /* simple bullets */
     .bullets{margin:8px 0 0; padding-left:18px; line-height:1.6}
     .bullets li{margin:6px 0}
-    /* details block that sits UNDER the gradient ring */
     .pack-details{margin-top:18px}
     .details-grid{display:grid; gap:14px; grid-template-columns:1fr}
     @media (min-width:900px){ .details-grid{grid-template-columns:1.1fr 1fr} }
@@ -110,7 +107,8 @@
   <header class="nav">
     <div class="nav-inner wrap">
       <a href="#top" class="brand" aria-label="Compbuild home">
-        <img class="logo" src="https://static.wixstatic.com/media/5f17e4_8d64bc05672c4787bcc7a5b3220e4303~mv2.png/v1/fill/w_53,h_53,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/5f17e4_8d64bc05672c4787bcc7a5b3220e4303~mv2.png" alt="Compbuild" width="28" height="28" />
+        <!-- logo will swap based on theme -->
+        <img class="logo" id="siteLogo" src="https://cdn.discordapp.com/attachments/797200588214501466/1414726187644752133/WhiteTemp.png?ex=68c09def&is=68bf4c6f&hm=2ee1406341369914ca29c0e9b3c3c4995287ee13ed3346999ad4cf86425e020c&" alt="Compbuild" width="28" height="28" />
       </a>
       <nav class="nav-links">
         <a href="#about">About</a>
@@ -258,15 +256,28 @@
   <div id="toast" class="toast" role="status" aria-live="polite">Copied!</div>
 
   <script>
-    // Theme toggle + persist
+    // Theme toggle + persist + logo swap
     const root = document.documentElement;
     const toggle = document.getElementById('themeToggle');
+    const logo = document.getElementById('siteLogo');
+
+    // exact URLs you provided
+    const DARK_LOGO = 'https://cdn.discordapp.com/attachments/797200588214501466/1414726187644752133/WhiteTemp.png?ex=68c09def&is=68bf4c6f&hm=2ee1406341369914ca29c0e9b3c3c4995287ee13ed3346999ad4cf86425e020c&';
+    const LIGHT_LOGO = 'https://cdn.discordapp.com/attachments/797200588214501466/1414726186638250074/black.png?ex=68c09def&is=68bf4c6f&hm=77fbb0f5adcf58c379be157e7f871a0b62f3293aaf4d107663e9815ca11daa2b&';
+
+    function setTheme(theme){
+      root.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      logo.src = theme === 'dark' ? DARK_LOGO : LIGHT_LOGO;
+    }
+
+    // honor saved theme else default to current attribute (dark in your HTML)
     const saved = localStorage.getItem('theme');
-    if(saved){ root.setAttribute('data-theme', saved); }
+    if(saved){ setTheme(saved); } else { setTheme(root.getAttribute('data-theme') || 'dark'); }
+
     toggle.addEventListener('click', () => {
-      const cur = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', cur);
-      localStorage.setItem('theme', cur);
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      setTheme(next);
     });
 
     // Simple reveal-on-scroll (staggered)
@@ -287,7 +298,6 @@
     }
     function copyText(str){
       navigator.clipboard.writeText(str).then(showToast).catch(()=>{
-        // fallback
         const ta = document.createElement('textarea');
         ta.value = str; document.body.appendChild(ta); ta.select();
         try{ document.execCommand('copy'); showToast(); } finally { document.body.removeChild(ta); }
