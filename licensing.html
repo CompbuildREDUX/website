@@ -1,82 +1,344 @@
 <!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Licensing — Compbuild Textures (CTUL)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..900&display=swap" rel="stylesheet">
+  <style>
+    /* ---------- THEME ---------- */
+    :root{
+      --bg:#ffffff; --fg:#0a0a0a; --muted:#6b6b6b; --line: color-mix(in oklab, var(--fg) 12%, transparent);
+      --card: color-mix(in oklab, var(--fg) 5%, transparent); --max:1280px; --pad:clamp(16px,3vw,40px);
+      --accent:#1f8cff; --pink:#ff0675; --violet:#7c3cff;
+    }
+    [data-theme="dark"]{
+      --bg:#0a0a0a; --fg:#f5f5f5; --muted:#a4a4a4; --line: color-mix(in oklab, var(--fg) 16%, transparent);
+      --card: color-mix(in oklab, var(--fg) 6%, transparent);
+    }
 
+    *{box-sizing:border-box; font-family:"Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;}
+    html,body{height:100%}
+    body{margin:0; background:var(--bg); color:var(--fg);}
+    a{color:inherit; text-decoration:none}
+    img{display:block; max-width:100%; height:auto;}
 
-/* ---------- LAYOUT ---------- */
-.wrap{max-width:var(--max); margin-inline:auto; padding-inline:var(--pad)}
-.stack{display:grid; gap:clamp(16px,2vw,28px)}
+    /* ---------- LAYOUT ---------- */
+    .wrap{max-width:var(--max); margin-inline:auto; padding-inline:var(--pad)}
+    .stack{display:grid; gap:clamp(16px,2vw,28px)}
 
+    /* ---------- NAV ---------- */
+    .nav{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(8px);
+         background: color-mix(in oklab, var(--bg) 85%, transparent); border-bottom:1px solid var(--line)}
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px var(--pad)}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img.logo{width:28px; height:28px}
+    .nav-links{display:flex; gap:20px; align-items:center}
+    .nav-links a{opacity:.9}
+    .nav-links a:hover{opacity:1}
+    .btn{display:inline-flex; align-items:center; gap:10px; border:1px solid var(--line); padding:10px 14px; border-radius:0; position:relative; isolation:isolate}
+    .btn:hover{background:var(--card)}
+    .btn.arrow::after{content:"→"; display:inline-block; transform:translateX(0); transition:transform .2s ease}
+    .btn.arrow:hover::after{transform:translateX(3px)}
 
-/* ---------- NAV ---------- */
-.nav{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(8px);
-background: color-mix(in oklab, var(--bg) 85%, transparent); border-bottom:1px solid var(--line)}
-.nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px var(--pad)}
-.brand{display:flex; align-items:center; gap:10px}
-.brand img.logo{width:28px; height:28px}
-.nav-links{display:flex; gap:20px; align-items:center}
-.nav-links a{opacity:.9}
-.nav-links a:hover{opacity:1}
-.btn{display:inline-flex; align-items:center; gap:10px; border:1px solid var(--line); padding:10px 14px; border-radius:0; position:relative; isolation:isolate}
-.btn:hover{background:var(--card)}
-.btn.arrow::after{content:"→"; display:inline-block; transform:translateX(0); transition:transform .2s ease}
-.btn.arrow:hover::after{transform:translateX(3px)}
+    /* ---------- HERO ---------- */
+    .hero{position:relative; min-height:56svh; display:grid; place-items:center; border-bottom:1px solid var(--line);}
+    .hero-inner{position:relative; z-index:2;}
+    .eyebrow{font-size:.9rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+    h1{font-size:clamp(36px,6vw,72px); line-height:1.02; margin:8px 0 12px}
+    p.lead{color:var(--muted); font-size:clamp(16px,1.4vw,18px);}
 
+    /* ---------- SECTION ---------- */
+    section{padding: clamp(56px, 8vw, 140px) 0; border-bottom:1px solid var(--line)}
+    h2{font-size:clamp(28px,4.4vw,44px); margin:0 0 8px}
+    h3{margin:0 0 6px}
+    .muted{color:var(--muted)}
 
-/* ---------- HERO ---------- */
-.hero{position:relative; min-height:56svh; display:grid; place-items:center; border-bottom:1px solid var(--line);}
-.hero-inner{position:relative; z-index:2;}
-.eyebrow{font-size:.9rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
-h1{font-size:clamp(36px,6vw,72px); line-height:1.02; margin:8px 0 12px}
-p.lead{color:var(--muted); font-size:clamp(16px,1.4vw,18px);}
+    /* ---------- GRID / CARDS ---------- */
+    .grid{display:grid; gap:18px; grid-template-columns: repeat(12, 1fr)}
+    .cols-4{grid-column:span 12}
+    @media (min-width:820px){ .cols-4{grid-column:span 4} }
+    .card{background:var(--card); border:1px solid var(--line); border-radius:0; overflow:hidden; display:flex; flex-direction:column}
+    .card-body{padding:16px}
+    .price{font-weight:800; font-size:1.2rem}
+    .pill{display:inline-block; border:1px solid var(--line); padding:6px 10px; font-size:.85rem}
 
+    /* ---------- TABLE ---------- */
+    .table{width:100%; border-collapse:collapse; border:1px solid var(--line)}
+    .table th,.table td{padding:12px 12px; border-bottom:1px solid var(--line); text-align:left}
+    .table thead th{font-weight:700; background:var(--card)}
 
-/* ---------- SECTION ---------- */
-section{padding: clamp(56px, 8vw, 140px) 0; border-bottom:1px solid var(--line)}
-h2{font-size:clamp(28px,4.4vw,44px); margin:0 0 8px}
-h3{margin:0 0 6px}
-.muted{color:var(--muted)}
+    /* ---------- CALLOUT / RING ---------- */
+    .ring{ --ring: conic-gradient(from 180deg at 50% 50%, var(--pink), var(--accent), var(--violet), var(--pink));
+      padding:2px; background:var(--ring); border-radius:0; }
+    .ring > .box{ background:var(--bg); }
+    .box{background:var(--card); border:1px solid var(--line); border-radius:0; padding:18px}
 
+    /* ---------- FAQ ---------- */
+    details{border:1px solid var(--line); background:var(--card); padding:12px 14px; border-radius:0}
+    details + details{margin-top:10px}
+    details summary{cursor:pointer; list-style:none}
+    details summary::-webkit-details-marker{display:none}
+    details[open]{background: color-mix(in oklab, var(--fg) 8%, transparent)}
 
-/* ---------- GRID / CARDS ---------- */
-.grid{display:grid; gap:18px; grid-template-columns: repeat(12, 1fr)}
-.cols-4{grid-column:span 12}
-@media (min-width:820px){ .cols-4{grid-column:span 4} }
-.card{background:var(--card); border:1px solid var(--line); border-radius:0; overflow:hidden; display:flex; flex-direction:column}
-.card-body{padding:16px}
-.price{font-weight:800; font-size:1.2rem}
-.pill{display:inline-block; border:1px solid var(--line); padding:6px 10px; font-size:.85rem}
+    /* ---------- MICRO INTERACTIONS ---------- */
+    .reveal{opacity:0; translate:0 10px; transition:opacity .6s ease, translate .6s ease}
+    .reveal.in{opacity:1; translate:0 0}
 
-
-/* ---------- TABLE ---------- */
-.table{width:100%; border-collapse:collapse; border:1px solid var(--line)}
-.table th,.table td{padding:12px 12px; border-bottom:1px solid var(--line); text-align:left}
-.table thead th{font-weight:700; background:var(--card)}
-
-
-/* ---------- CALLOUT / RING ---------- */
-.ring{ --ring: conic-gradient(from 180deg at 50% 50%, var(--pink), var(--accent), var(--violet), var(--pink));
-padding:2px; background:var(--ring); border-radius:0; }
-.ring > .box{ background:var(--bg); }
-.box{background:var(--card); border:1px solid var(--line); border-radius:0; padding:18px}
-
-
-/* ---------- FAQ ---------- */
-details{border:1px solid var(--line); background:var(--card); padding:12px 14px; border-radius:0}
-details + details{margin-top:10px}
-details summary{cursor:pointer; list-style:none}
-details summary::-webkit-details-marker{display:none}
-details[open]{background: color-mix(in oklab, var(--fg) 8%, transparent)}
-
-
-/* ---------- MICRO INTERACTIONS ---------- */
-.reveal{opacity:0; translate:0 10px; transition:opacity .6s ease, translate .6s ease}
-.reveal.in{opacity:1; translate:0 0}
-
-
-/* ---------- FOOTER ---------- */
-footer{padding:38px var(--pad); color:var(--muted)}
-</style>
+    /* ---------- FOOTER ---------- */
+    footer{padding:38px var(--pad); color:var(--muted)}
+  </style>
 </head>
 <body>
-<!-- All content remains unchanged from your original code -->
+  <!-- NAV -->
+  <header class="nav">
+    <div class="nav-inner wrap">
+      <a href="/" class="brand" aria-label="Compbuild home">
+        <img class="logo" id="siteLogo" src="https://cdn.discordapp.com/attachments/797200588214501466/1414726187644752133/WhiteTemp.png?ex=68c09def&is=68bf4c6f&hm=2ee1406341369914ca29c0e9b3c3c4995287ee13ed3346999ad4cf86425e020c&" alt="Compbuild" width="28" height="28" />
+        <span class="muted" style="letter-spacing:.06em">COMPBUILD</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/#about">About</a>
+        <a href="/#projects">Projects</a>
+        <a href="/catalog">Catalog</a>
+        <button id="themeToggle" class="btn arrow" aria-label="Toggle theme">Dark/Light</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner wrap">
+      <span class="eyebrow">Licensing</span>
+      <h1 class="reveal">Compbuild Textures — CTUL</h1>
+      <p class="lead reveal">The CTUL ensures Compbuild’s work stays protected and that anyone reusing our assets does so fairly and with proper credit. If you want to publish our textures inside your own pack, you’ll need a paid license.</p>
+      <div class="reveal" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:8px">
+        <a class="btn arrow" href="#tiers">View license tiers</a>
+        <a class="btn arrow" href="#faq">Read FAQs</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT'S ALLOWED -->
+  <section id="policy">
+    <div class="wrap stack">
+      <h2 class="reveal">What’s free vs. what needs a license</h2>
+      <div class="grid">
+        <article class="cols-4 card reveal">
+          <div class="card-body">
+            <span class="pill">✅ Free (no license)</span>
+            <h3 style="margin-top:10px">Personal & free public use</h3>
+            <ul class="muted" style="line-height:1.6; padding-left:18px; margin:8px 0 0">
+              <li>Use the pack as-is in personal worlds, maps, screenshots, and videos.</li>
+              <li>Use in free public projects as long as the pack is unmodified.</li>
+              <li>Screenshots/renders from privately modified versions (no public distribution).</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="cols-4 card reveal">
+          <div class="card-body">
+            <span class="pill">💼 Requires license</span>
+            <h3 style="margin-top:10px">Redistribution & integration</h3>
+            <ul class="muted" style="line-height:1.6; padding-left:18px; margin:8px 0 0">
+              <li>Including any Compbuild textures/models inside another resource pack.</li>
+              <li>Editing, recoloring, or merging our assets and publishing them.</li>
+              <li>Commercial/monetized use that packages our textures in deliverables.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="cols-4 card reveal">
+          <div class="card-body">
+            <span class="pill">⚖️ EULA compliant</span>
+            <h3 style="margin-top:10px">Minecraft EULA note</h3>
+            <p class="muted" style="margin:8px 0 0">
+              CTUL licenses <b>our original textures</b> (not Mojang’s). Selling or licensing your own art that runs in Minecraft is allowed by Mojang’s rules. We do not sell or distribute Mojang’s assets.
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIERS / PRICING -->
+  <section id="tiers">
+    <div class="wrap stack">
+      <div class="ring reveal"><div class="box">
+        <h2 style="margin:0 0 8px">License tiers</h2>
+        <p class="lead" style="margin:0">Simple, transparent options. Need something custom? We’ll quote it.</p>
+      </div></div>
+
+      <div class="grid">
+        <article class="cols-4 card reveal">
+          <div class="card-body">
+            <h3>Personal Use (Free)</h3>
+            <p class="muted">Use the full pack unmodified in personal or free public projects. No redistribution.</p>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:6px">
+              <span class="price">$0</span>
+              <a class="btn arrow" href="#policy">What’s allowed</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="cols-4 card reveal">
+          <div class="card-body">
+            <h3>Pack Integration License</h3>
+            <p class="muted">Include Compbuild textures in your own publicly released resource pack.</p>
+            <table class="table" style="margin:10px 0 8px">
+              <thead><tr><th>Scope</th><th>Price</th></tr></thead>
+              <tbody>
+                <tr><td>Single texture</td><td>$5</td></tr>
+                <tr><td>Up to 10 textures</td><td>$25</td></tr>
+                <tr><td>Up to 30 textures</td><td>$60</td></tr>
+                <tr><td>Full integration</td><td>$120</td></tr>
+              </tbody>
+            </table>
+            <div style="display:flex; gap:8px; flex-wrap:wrap">
+              <a class="btn arrow" href="#apply">Apply for license</a>
+              <a class="btn" href="#terms">Key terms</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="cols-4 card reveal">
+          <div class="card-body">
+            <h3>Partner / Studio License</h3>
+            <p class="muted">For studios, schools, brands, or large monetized projects needing ongoing rights and support.</p>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:6px">
+              <span class="price">Custom quote</span>
+              <a class="btn arrow" href="#apply">Start request</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- TERMS SNAPSHOT -->
+  <section id="terms">
+    <div class="wrap stack">
+      <h2 class="reveal">Key terms (snapshot)</h2>
+      <div class="grid">
+        <div class="cols-4 card reveal"><div class="card-body">
+          <h3>Ownership</h3>
+          <p class="muted">All textures, models, and associated assets are © Compbuild REDUX. No ownership is transferred by licensing.</p>
+        </div></div>
+        <div class="cols-4 card reveal"><div class="card-body">
+          <h3>Attribution</h3>
+          <p class="muted">Public/paid projects must credit: <b>“Textures by Compbuild”</b> or <b>“Using Compbuild Textures under CTUL License.”</b></p>
+        </div></div>
+        <div class="cols-4 card reveal"><div class="card-body">
+          <h3>Enforcement</h3>
+          <p class="muted">Unauthorized redistribution or integration may trigger takedowns (DMCA) and legal action. See full CTUL for details.</p>
+        </div></div>
+      </div>
+      <div class="reveal">
+        <a class="btn arrow" href="/CTUL.pdf" target="_blank" rel="noopener">Download CTUL (PDF)</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPLY / CTA -->
+  <section id="apply">
+    <div class="wrap stack">
+      <div class="ring reveal"><div class="box">
+        <h2 style="margin:0 0 8px">Apply for a license</h2>
+        <p class="lead" style="margin:0 0 14px">Send us your project details. We usually respond within 1–2 business days.</p>
+        <div class="grid">
+          <div class="cols-4" style="grid-column:span 7">
+            <ul class="muted" style="line-height:1.7; padding-left:18px; margin:0">
+              <li>Project name + link (if any)</li>
+              <li>How many textures you plan to include</li>
+              <li>Distribution: free / monetized / studio</li>
+              <li>Where it will be published</li>
+            </ul>
+          </div>
+          <div class="cols-4" style="grid-column:span 5">
+            <div class="stack">
+              <a class="btn arrow" href="mailto:officialcompbuildredux@gmail.com?subject=Compbuild%20License%20Request">Email: officialcompbuildredux@gmail.com</a>
+              <a class="btn arrow" href="https://discord.gg/" target="_blank" rel="noopener">Message us on Discord</a>
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap stack">
+      <h2 class="reveal">FAQs</h2>
+
+      <details class="reveal">
+        <summary><b>Can I use screenshots of privately modified packs?</b></summary>
+        <p class="muted" style="margin-top:8px">Yes. Private modifications are fine for screenshots/renders <b>as long as the modified pack itself is not publicly distributed.</b></p>
+      </details>
+
+      <details class="reveal">
+        <summary><b>Is CTUL compatible with the Minecraft EULA?</b></summary>
+        <p class="muted" style="margin-top:8px">Yes. CTUL licenses <i>our</i> original textures, not Mojang’s. Selling/licensing your own art that runs in Minecraft is allowed by the EULA. We do not sell or distribute Mojang assets.</p>
+      </details>
+
+      <details class="reveal">
+        <summary><b>Do I need a license for YouTube videos?</b></summary>
+        <p class="muted" style="margin-top:8px">No, if you use the pack as-is. If you publish a pack containing our textures, you need a license.</p>
+      </details>
+
+      <details class="reveal">
+        <summary><b>What happens if someone reuploads my licensed project?</b></summary>
+        <p class="muted" style="margin-top:8px">We issue DMCA takedowns and, if needed, Cease &amp; Desist notices. Your license remains valid; we target the infringing upload.</p>
+      </details>
+
+      <details class="reveal">
+        <summary><b>Can I get a custom quote?</b></summary>
+        <p class="muted" style="margin-top:8px">Yes—use the “Apply for a license” section and choose Partner / Studio. We’ll tailor scope, price, and support.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="wrap">
+    <div class="stack">
+      <div class="muted">©2025 COMPBUILD REDUX — Not an official Minecraft service. Not affiliated with Mojang or Microsoft.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Theme toggle + persist + logo swap
+    const root = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    const logo = document.getElementById('siteLogo');
+
+    const DARK_LOGO = 'https://cdn.discordapp.com/attachments/797200588214501466/1414726187644752133/WhiteTemp.png?ex=68c09def&is=68bf4c6f&hm=2ee1406341369914ca29c0e9b3c3c4995287ee13ed3346999ad4cf86425e020c&';
+    const LIGHT_LOGO = 'https://cdn.discordapp.com/attachments/797200588214501466/1414726186638250074/black.png?ex=68c09def&is=68bf4c6f&hm=77fbb0f5adcf58c379be157e7f871a0b62f3293aaf4d107663e9815ca11daa2b&';
+
+    function setTheme(theme){
+      root.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      if(logo) logo.src = theme === 'dark' ? DARK_LOGO : LIGHT_LOGO;
+    }
+    const saved = localStorage.getItem('theme');
+    setTheme(saved ? saved : (root.getAttribute('data-theme') || 'dark'));
+
+    if(toggle){
+      toggle.addEventListener('click', () => {
+        const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        setTheme(next);
+      });
+    }
+
+    // Reveal-on-scroll
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} })
+    }, {threshold: 0.12});
+    document.querySelectorAll('.reveal').forEach((el,i)=>{
+      el.style.transitionDelay = (i*40)+'ms';
+      io.observe(el);
+    });
+  </script>
 </body>
 </html>
+
