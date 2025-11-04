@@ -33,11 +33,21 @@
 
     .features { text-align: left; list-style: none; margin-top: 20px; }
     .features li { margin-top: 8px; font-size: 15px; }
+
+    .texture-gallery { width: 100%; margin-top: 60px; text-align: left; }
+    .texture-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
+    .texture-header h2 { font-size: 48px; font-weight: 800; }
+    .texture-header .nav { font-size: 20px; user-select: none; }
+
+    .texture-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .texture-item p { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #000; }
+    .texture-item img { width: 100%; border-radius: 8px; height: 600px; object-fit: cover; box-shadow: 0 5px 20px rgba(0,0,0,0.08); transition: transform 0.4s ease; }
+    .texture-item img:hover { transform: scale(1.02); }
   </style>
 </head>
 <body>
   <header>
-    <div><img src="black.png" alt="Compbuild"></div>
+    <div><img src="black.png" alt="Compbuild Logo"></div>
     <nav>
       <a href="#home">Home</a>
       <a href="#projects">Projects</a>
@@ -67,7 +77,7 @@
     </div>
 
     <div class="grid" style="margin-top: 100px;">
-      <img src="https://media.discordapp.net/attachments/796149186307293244/1360775468277698682/2025-04-12_19.35.03.png?ex=690a9be9&is=69094a69&hm=b159273af67d816ee147091832b31f26d589977d6bf4d04f2b53328c39139dbe&=&format=webp&quality=lossless&width=1521&height=856?auto=format&fit=crop&w=700&q=80" alt="Austin" />
+      <img src="https://media.discordapp.net/attachments/796149186307293244/1360775468277698682/2025-04-12_19.35.03.png?format=webp&quality=lossless&width=1521&height=856" alt="Austin" />
       <div>
         <h2>Austin</h2>
         <p>“This modern Texan city blends grit and gleaming skylines.”</p>
@@ -79,7 +89,7 @@
         <h2>Havelle</h2>
         <p>“Nestled on a wide river of marshland, this prehistoric European city is timeless.”</p>
       </div>
-      <img src="https://media.discordapp.net/attachments/796149186307293244/1370550266830524478/2025-05-09_18.56.24.png?ex=690a92e7&is=69094167&hm=28953d100c8d88bfb322f257b090e5f02de50943881762f669013ac1cc35e5ac&=&format=webp&quality=lossless&width=1521&height=856?auto=format&fit=crop&w=700&q=80" alt="Havelle" />
+      <img src="https://media.discordapp.net/attachments/796149186307293244/1370550266830524478/2025-05-09_18.56.24.png?format=webp&quality=lossless&width=1521&height=856" alt="Havelle" />
     </div>
   </section>
 
@@ -87,7 +97,26 @@
   <section id="textures">
     <h1>CHANGING UP THE LOOKS.</h1>
     <p>A one of a kind revolutionary texture pack for Minecraft architecture, visualization, creativity, and made for more than just our projects. Download Compbuild Textures to make your creativity fantastic.</p>
-    <h2 style="margin-top:40px;">FEATURES:</h2>
+
+    <div class="texture-gallery">
+      <div class="texture-header">
+        <h2>PHOTO GALLERY</h2>
+        <div class="nav">← →</div>
+      </div>
+
+      <div class="texture-grid">
+        <div class="texture-item">
+          <p>Structural Spectrum Pack</p>
+          <img src="https://images.unsplash.com/photo-1602524208701-4032e1f4b1a9?auto=format&fit=crop&w=1600&q=80" alt="Compbuild Texture 1">
+        </div>
+        <div class="texture-item">
+          <p>Architectural Illumination Kit</p>
+          <img src="https://images.unsplash.com/photo-1600607687331-551db975d1f3?auto=format&fit=crop&w=1600&q=80" alt="Compbuild Texture 2">
+        </div>
+      </div>
+    </div>
+
+    <h2 style="margin-top:60px;">FEATURES:</h2>
     <ul class="features">
       <li>• REGULAR UPDATES</li>
       <li>• 1000+ UNIQUE MODELS AND TEXTURES</li>
@@ -133,7 +162,5 @@
 </body>
 </html>
 
-
-     
 
 
