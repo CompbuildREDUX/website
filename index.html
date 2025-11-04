@@ -1,161 +1,137 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Compbuild — Realism. Detail. Innovation.</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300..800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compbuild Creative — Pushing the Boundaries</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg:#ffffff; --fg:#0a0a0a; --muted:#6b6b6b; --accent:#1f8cff; --line:#e5e5e5;
-      --pad:clamp(16px,3vw,48px); --max:1280px;
-    }
-    * { box-sizing:border-box; margin:0; padding:0; }
-    body { font-family:Manrope, system-ui, sans-serif; color:var(--fg); background:var(--bg); line-height:1.6; overflow-x:hidden; }
-    img { max-width:100%; display:block; }
-    a { text-decoration:none; color:inherit; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Manrope', sans-serif; }
+    body { background: #fff; color: #000; overflow-x: hidden; scroll-behavior: smooth; }
 
-    header { position:sticky; top:0; background:var(--bg); border-bottom:1px solid var(--line); z-index:100; }
-    .wrap { max-width:var(--max); margin:auto; padding:0 var(--pad); }
-    nav { display:flex; justify-content:space-between; align-items:center; height:72px; }
-    .logo { height:40px; }
-    .nav-links a { margin-left:32px; font-weight:500; position:relative; }
-    .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; width:0%; height:1.5px; background:var(--fg); transition:.3s; }
-    .nav-links a:hover::after { width:100%; }
-    .cta { border:2px solid var(--fg); padding:12px 28px; border-radius:4px; font-weight:600; transition:background .3s,color .3s,transform .3s; display:inline-block; }
-    .cta:hover { background:var(--fg); color:white; transform:translateY(-2px); }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 24px 60px; font-size: 15px; font-weight: 600; position: sticky; top: 0; background: #fff; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+    header img { height: 32px; }
+    nav a { margin: 0 20px; text-decoration: none; color: #000; transition: opacity 0.2s; }
+    nav a:hover { opacity: 0.6; }
+    .cta { font-weight: 700; text-decoration: none; color: #000; border-bottom: 1px solid #000; padding-bottom: 2px; }
 
-    main { overflow:hidden; }
+    section { padding: 100px 60px; min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; opacity: 0; transform: translateY(40px); transition: opacity 0.9s ease, transform 0.9s ease; }
+    section.visible { opacity: 1; transform: translateY(0); }
 
-    section { padding:clamp(80px,10vw,120px) var(--pad); border-bottom:1px solid var(--line); opacity:0; transform:translateY(40px); transition:opacity 0.8s ease, transform 0.8s ease; }
-    section.visible { opacity:1; transform:translateY(0); }
+    h1, h2 { font-weight: 800; line-height: 1.1; letter-spacing: -1px; }
+    h1 { font-size: clamp(48px, 6vw, 90px); }
+    h2 { font-size: clamp(36px, 5vw, 64px); margin-bottom: 20px; }
+    p { font-size: 16px; color: #333; line-height: 1.7; max-width: 720px; margin-top: 20px; }
 
-    h1, h2 { line-height:1.1; font-weight:800; letter-spacing:-1px; }
-    h1 { font-size:clamp(3rem,6vw,5rem); }
-    h2 { font-size:clamp(2.2rem,4vw,3.2rem); margin-bottom:20px; }
-    p { color:var(--muted); max-width:700px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; text-align: left; }
+    .grid img { width: 100%; border-radius: 6px; }
 
-    .hero { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:60px; align-items:center; }
-    .hero img { border-radius:4px; aspect-ratio:4/3; object-fit:cover; background:#eee; animation:fadeIn 1.2s ease forwards; }
+    .button { background: none; border: 1.5px solid #000; padding: 12px 26px; font-size: 15px; border-radius: 24px; font-weight: 600; cursor: pointer; margin-top: 30px; transition: background 0.3s, color 0.3s; text-decoration: none; color: #000; display: inline-block; }
+    .button:hover { background: #000; color: #fff; }
 
-    .about { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:60px; align-items:center; }
+    footer { text-align: center; font-size: 13px; color: #555; padding: 40px 60px; border-top: 1px solid rgba(0,0,0,0.1); }
 
-    .project { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:60px; align-items:center; margin-bottom:100px; }
-    .project:nth-child(even) { direction:rtl; }
-    .project:nth-child(even) * { direction:ltr; }
-    .project img { background:#eee; aspect-ratio:16/9; object-fit:cover; border-radius:4px; }
-
-    .textures { text-align:center; }
-    .textures img { margin:40px auto; background:#eee; width:80%; border-radius:4px; aspect-ratio:16/9; object-fit:cover; }
-
-    .join { text-align:center; }
-    .join .cta { font-size:1.1rem; }
-
-    footer { padding:60px var(--pad); text-align:center; color:var(--muted); font-size:.9rem; }
-    footer p { margin-bottom:6px; }
-
-    @keyframes fadeIn {
-      0% { opacity:0; transform:translateY(30px); }
-      100% { opacity:1; transform:translateY(0); }
-    }
+    .features { text-align: left; list-style: none; margin-top: 20px; }
+    .features li { margin-top: 8px; font-size: 15px; }
   </style>
 </head>
 <body>
   <header>
-    <div class="wrap">
-      <nav>
-        <img src="black.png" alt="Compbuild Logo" class="logo">
-        <div class="nav-links">
-          <a href="#about">About</a>
-          <a href="#projects">Projects</a>
-          <a href="#textures">Textures</a>
-          <a href="#join" class="cta">Join</a>
-        </div>
-      </nav>
-    </div>
+    <div><img src="black.png" alt="Compbuild"></div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#projects">Projects</a>
+      <a href="#textures">Textures</a>
+      <a href="#join">Join</a>
+    </nav>
+    <a href="#join" class="cta">Join Us →</a>
   </header>
 
-  <main>
-    <section class="hero">
+  <!-- Section 1: Hero -->
+  <section id="home">
+    <h1>PUSHING THE<br>BOUNDARIES.<br>OF MINECRAFT.</h1>
+    <p>Compbuild is a creative community founded in 2017. Our goal is to create creative expression through Minecraft as well as to push the boundaries with every project we take.</p>
+  </section>
+
+  <!-- Section 2: Projects -->
+  <section id="projects">
+    <h2>WE DON'T TAKE THE TRADITIONAL ROUTE.</h2>
+    <p>“A bustling North American metropolis with sights of magnificent architecture.”</p>
+
+    <div class="grid" style="margin-top: 60px;">
       <div>
-        <h1>WHAT. ARE. WE.</h1>
-        <p>We go out of our way to break the limits of Minecraft and turn it into more than just a game. Minecraft is our way of expression; it's our sandbox.</p>
-        <a href="#projects" class="cta">Explore Builds</a>
+        <h2>Alaire</h2>
+        <p>A modern cityscape that captures the blend of scale and style Compbuild is known for.</p>
       </div>
-      <img src="placeholder_hero.jpg" alt="Hero Image Placeholder">
-    </section>
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=700&q=80" alt="Alaire" />
+    </div>
 
-    <section id="about" class="about">
-      <img src="placeholder_about.jpg" alt="About Placeholder">
+    <div class="grid" style="margin-top: 100px;">
+      <img src="https://images.unsplash.com/photo-1542223616-64e5d3b2c4a1?auto=format&fit=crop&w=700&q=80" alt="Austin" />
       <div>
-        <h2>PUSHING THE BOUNDARIES OF MINECRAFT</h2>
-        <p>Compbuild is a creative community founded in 2017. Our goal is to create creative expression through Minecraft as well as to push the boundaries with every project we take.</p>
+        <h2>Austin</h2>
+        <p>“This modern Texan city blends grit and gleaming skylines.”</p>
       </div>
-    </section>
+    </div>
 
-    <section id="projects" class="projects">
-      <div class="project">
-        <img src="placeholder_alaire.jpg" alt="Alaire Placeholder">
-        <div>
-          <h2>ALAIRE</h2>
-          <p>“A bustling North American metropolis with sights of magnificent architecture.”</p>
-        </div>
+    <div class="grid" style="margin-top: 100px;">
+      <div>
+        <h2>Havelle</h2>
+        <p>“Nestled on a wide river of marshland, this prehistoric European city is timeless.”</p>
       </div>
-      <div class="project">
-        <img src="placeholder_austin.jpg" alt="Austin Placeholder">
-        <div>
-          <h2>AUSTIN</h2>
-          <p>“This modern Texan city blends grit and gleaming skylines.”</p>
-        </div>
-      </div>
-      <div class="project">
-        <img src="placeholder_havelle.jpg" alt="Havelle Placeholder">
-        <div>
-          <h2>HAVELLE</h2>
-          <p>“Nestled on a wide river of marshland, this prehistoric European city is timeless.”</p>
-        </div>
-      </div>
-    </section>
+      <img src="https://images.unsplash.com/photo-1529429611273-4e36f07e5a4a?auto=format&fit=crop&w=700&q=80" alt="Havelle" />
+    </div>
+  </section>
 
-    <section id="textures" class="textures">
-      <h2>CHANGING UP THE LOOKS</h2>
-      <p>A one of a kind revolutionary texture pack for Minecraft architecture, visualization, creativity, and made for more than just our projects. Download Compbuild Textures to make your creativity fantastic.</p>
-      <img src="placeholder_textures.jpg" alt="Textures Placeholder">
-      <a href="#" class="cta">Download Textures</a>
-    </section>
+  <!-- Section 3: Textures -->
+  <section id="textures">
+    <h1>CHANGING UP THE LOOKS.</h1>
+    <p>A one of a kind revolutionary texture pack for Minecraft architecture, visualization, creativity, and made for more than just our projects. Download Compbuild Textures to make your creativity fantastic.</p>
+    <h2 style="margin-top:40px;">FEATURES:</h2>
+    <ul class="features">
+      <li>• REGULAR UPDATES</li>
+      <li>• 1000+ UNIQUE MODELS AND TEXTURES</li>
+      <li>• BIOME DEPENDENT BLOCKS AND TEXTURES</li>
+      <li>• EVERY SINGLE BLOCK TEXTURED</li>
+      <li>• JUST TRY IT ALREADY</li>
+    </ul>
 
-    <section id="join" class="join">
-      <h2>WHAT ARE YOU WAITING FOR?</h2>
-      <p>Become a member of our community today by joining our server, as well as applying on our Discord.</p>
-      <a href="#" class="cta">Join Discord</a>
-    </section>
-  </main>
+    <div style="margin-top:40px;">
+      <a href="#" class="button">DOWNLOAD</a>
+      <a href="#" class="button">CATALOG</a>
+      <a href="#" class="button">GITHUB</a>
+    </div>
+
+    <p style="margin-top:20px; font-size:13px; color:#666;">REQUIRES OPTIFINE*</p>
+  </section>
+
+  <!-- Section 4: Join -->
+  <section id="join">
+    <h1>BE A PART OF IT.</h1>
+    <p>WHAT ARE YOU WAITING FOR?<br>Become a member of our community today by joining our server, as well as applying on our Discord.</p>
+    <div style="margin-top:40px;">
+      <p style="font-weight:700; font-size:18px;">IP: PLAY.COMPBUILDREDUX.NET</p>
+    </div>
+  </section>
 
   <footer>
-    <p>©2025 COMPBUILD REDUX</p>
-    <p>Not affiliated with Mojang or Microsoft.</p>
+    <p>©2025 COMPBUILD REDUX<br>Not an official Minecraft service. Not affiliated with Mojang or Microsoft.</p>
   </footer>
 
   <script>
-    // Fade-in animation on scroll
-    const observer = new IntersectionObserver((entries) => {
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        if(entry.isIntersecting) {
+        if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
     }, { threshold: 0.15 });
 
-    document.querySelectorAll('section').forEach(section => {
-      observer.observe(section);
-    });
+    sections.forEach(section => observer.observe(section));
   </script>
 </body>
 </html>
-
-
 
 
      
