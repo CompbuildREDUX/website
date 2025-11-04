@@ -1,314 +1,160 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>COMPBUILD — Creative Minecraft Studio</title>
+  <title>Compbuild — Realism. Detail. Innovation.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300..800&display=swap" rel="stylesheet">
   <style>
-    /* ---------- THEME ---------- */
-    :root{
-      --bg:#ffffff; --fg:#0a0a0a; --muted:#6b6b6b; --line: color-mix(in oklab, var(--fg) 12%, transparent);
-      --card: color-mix(in oklab, var(--fg) 5%, transparent); --max:1280px; --pad:clamp(16px,3vw,40px);
-      --accent:#1f8cff; --pink:#ff0675; --violet:#7c3cff;
+    :root {
+      --bg:#ffffff; --fg:#0a0a0a; --muted:#6b6b6b; --accent:#1f8cff; --line:#e5e5e5;
+      --pad:clamp(16px,3vw,48px); --max:1280px;
     }
-    [data-theme="dark"]{
-      --bg:#0a0a0a; --fg:#f5f5f5; --muted:#a4a4a4; --line: color-mix(in oklab, var(--fg) 16%, transparent);
-      --card: color-mix(in oklab, var(--fg) 6%, transparent);
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:Manrope, system-ui, sans-serif; color:var(--fg); background:var(--bg); line-height:1.6; overflow-x:hidden; }
+    img { max-width:100%; display:block; }
+    a { text-decoration:none; color:inherit; }
+
+    header { position:sticky; top:0; background:var(--bg); border-bottom:1px solid var(--line); z-index:100; }
+    .wrap { max-width:var(--max); margin:auto; padding:0 var(--pad); }
+    nav { display:flex; justify-content:space-between; align-items:center; height:72px; }
+    .logo { height:40px; }
+    .nav-links a { margin-left:32px; font-weight:500; position:relative; }
+    .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; width:0%; height:1.5px; background:var(--fg); transition:.3s; }
+    .nav-links a:hover::after { width:100%; }
+    .cta { border:2px solid var(--fg); padding:12px 28px; border-radius:4px; font-weight:600; transition:background .3s,color .3s,transform .3s; display:inline-block; }
+    .cta:hover { background:var(--fg); color:white; transform:translateY(-2px); }
+
+    main { overflow:hidden; }
+
+    section { padding:clamp(80px,10vw,120px) var(--pad); border-bottom:1px solid var(--line); opacity:0; transform:translateY(40px); transition:opacity 0.8s ease, transform 0.8s ease; }
+    section.visible { opacity:1; transform:translateY(0); }
+
+    h1, h2 { line-height:1.1; font-weight:800; letter-spacing:-1px; }
+    h1 { font-size:clamp(3rem,6vw,5rem); }
+    h2 { font-size:clamp(2.2rem,4vw,3.2rem); margin-bottom:20px; }
+    p { color:var(--muted); max-width:700px; }
+
+    .hero { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:60px; align-items:center; }
+    .hero img { border-radius:4px; aspect-ratio:4/3; object-fit:cover; background:#eee; animation:fadeIn 1.2s ease forwards; }
+
+    .about { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:60px; align-items:center; }
+
+    .project { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:60px; align-items:center; margin-bottom:100px; }
+    .project:nth-child(even) { direction:rtl; }
+    .project:nth-child(even) * { direction:ltr; }
+    .project img { background:#eee; aspect-ratio:16/9; object-fit:cover; border-radius:4px; }
+
+    .textures { text-align:center; }
+    .textures img { margin:40px auto; background:#eee; width:80%; border-radius:4px; aspect-ratio:16/9; object-fit:cover; }
+
+    .join { text-align:center; }
+    .join .cta { font-size:1.1rem; }
+
+    footer { padding:60px var(--pad); text-align:center; color:var(--muted); font-size:.9rem; }
+    footer p { margin-bottom:6px; }
+
+    @keyframes fadeIn {
+      0% { opacity:0; transform:translateY(30px); }
+      100% { opacity:1; transform:translateY(0); }
     }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0; font-family:"Manrope",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--fg);}
-    a{color:inherit; text-decoration:none}
-    img{display:block; max-width:100%; height:auto;}
-
-    /* ---------- LAYOUT ---------- */
-    .wrap{max-width:var(--max); margin-inline:auto; padding-inline:var(--pad)}
-    .stack{display:grid; gap:clamp(16px,2vw,28px)}
-
-    /* ---------- NAV ---------- */
-    .nav{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(8px);
-         background: color-mix(in oklab, var(--bg) 85%, transparent); border-bottom:1px solid var(--line)}
-    .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px var(--pad)}
-    .brand{display:flex; align-items:center; gap:10px}
-    .brand img.logo{width:28px; height:28px}
-    .nav-links{display:flex; gap:20px; align-items:center}
-    .nav-links a{opacity:.9}
-    .nav-links a:hover{opacity:1}
-
-    /* ---------- BUTTONS (square, modern arrow) ---------- */
-    .btn{display:inline-flex; align-items:center; gap:10px; border:1px solid var(--line); padding:10px 14px; border-radius:0; position:relative; isolation:isolate}
-    .btn:hover{background:var(--card)}
-    .btn.arrow::after{content:"→"; display:inline-block; transform:translateX(0); transition:transform .2s ease}
-    .btn.arrow:hover::after{transform:translateX(3px)}
-
-    /* ---------- HERO ---------- */
-    .hero{position:relative; min-height:78svh; display:grid; place-items:center; border-bottom:1px solid var(--line);}
-    .hero-media{position:absolute; inset:0; overflow:hidden;}
-    .hero-media img{width:100%; height:100%; object-fit:cover; filter:contrast(1.05) saturate(1.02); opacity:.55}
-    .hero-shade{position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, color-mix(in oklab, var(--bg) 75%, transparent))}
-    .hero-inner{position:relative; z-index:2;}
-    .eyebrow{font-size:.9rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
-    h1{font-size:clamp(36px,6vw,76px); line-height:1.02; margin:8px 0 12px}
-    .ip{font-feature-settings:"tnum" on, "lnum" on; font-weight:800; letter-spacing:.04em}
-
-    /* ---------- SECTION ---------- */
-    section{padding: clamp(60px, 10vw, 160px) 0; border-bottom:1px solid var(--line)}
-    h2{font-size:clamp(28px,4.5vw,44px); margin:0 0 12px}
-    p.lead{color:var(--muted); font-size:clamp(16px,1.4vw,18px);}
-
-    /* ---------- GRID / CARDS ---------- */
-    .grid{display:grid; gap:18px; grid-template-columns: repeat(12, 1fr)}
-    .cols-3{grid-column:span 12}
-    @media (min-width:700px){.cols-3{grid-column:span 4}}
-
-    .card{background:var(--card); border:1px solid var(--line); border-radius:0; overflow:hidden; display:flex; flex-direction:column}
-    .card-media{aspect-ratio: 16/10; overflow:hidden}
-    .card-media img{width:100%; height:100%; object-fit:cover}
-    .card-body{padding:14px 14px 16px}
-    .card h3{margin:4px 0 6px; font-size:1.25rem}
-    .muted{color:var(--muted)}
-
-    /* ---------- CALLOUT ---------- */
-    .callout{display:grid; gap:20px; grid-template-columns:1fr; align-items:center}
-    .callout .box{background:var(--card); border:1px solid var(--line); border-radius:0; padding:18px}
-    @media (min-width:900px){ .callout{grid-template-columns: 1.2fr .9fr} }
-
-    /* Gradient ring wrapper for Textures */
-    .ring{ --ring: conic-gradient(from 180deg at 50% 50%, var(--pink), var(--accent), var(--violet), var(--pink));
-      padding:2px; background:var(--ring); border-radius:0; }
-    .ring > .box{ background:var(--bg); }
-
-    /* ---------- PACK FEATURES (new) ---------- */
-    #pack{padding: clamp(32px,5vw,84px) 0}
-    .bullets{margin:8px 0 0; padding-left:18px; line-height:1.6}
-    .bullets li{margin:6px 0}
-    .pack-details{margin-top:18px}
-    .details-grid{display:grid; gap:14px; grid-template-columns:1fr}
-    @media (min-width:900px){ .details-grid{grid-template-columns:1.1fr 1fr} }
-
-    /* ---------- FOOTER ---------- */
-    footer{padding:38px var(--pad); color:var(--muted)}
-
-    /* ---------- MICRO INTERACTIONS ---------- */
-    .reveal{opacity:0; translate:0 10px; transition:opacity .6s ease, translate .6s ease}
-    .reveal.in{opacity:1; translate:0 0}
-
-    /* Copy toast */
-    .toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(10px); border:1px solid var(--line); background:var(--bg); padding:10px 14px; opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;}
-    .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
   </style>
 </head>
 <body>
-  <!-- NAV -->
-  <header class="nav">
-    <div class="nav-inner wrap">
-      <a href="#top" class="brand" aria-label="Compbuild home">
-        <!-- logo will swap based on theme -->
-        <img class="logo" id="siteLogo" src="https://cdn.discordapp.com/attachments/797200588214501466/1414726187644752133/WhiteTemp.png?ex=68c09def&is=68bf4c6f&hm=2ee1406341369914ca29c0e9b3c3c4995287ee13ed3346999ad4cf86425e020c&" alt="Compbuild" width="28" height="28" />
-      </a>
-      <nav class="nav-links">
-        <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="/catalog">Catalog</a>
-        <button id="themeToggle" class="btn arrow" aria-label="Toggle theme">Dark/Light</button>
+  <header>
+    <div class="wrap">
+      <nav>
+        <img src="black.png" alt="Compbuild Logo" class="logo">
+        <div class="nav-links">
+          <a href="#about">About</a>
+          <a href="#projects">Projects</a>
+          <a href="#textures">Textures</a>
+          <a href="#join" class="cta">Join</a>
+        </div>
       </nav>
     </div>
   </header>
 
-  <!-- HERO -->
-  <section id="top" class="hero">
-    <div class="hero-media" aria-hidden="true">
-      <img loading="eager" decoding="async" src="https://static.wixstatic.com/media/5f17e4_cc4be22a9aff4311a92220a5f33e6808~mv2.png/v1/fill/w_1600,h_900,al_c,q_85,enc_avif,quality_auto/2025-01-11_16_20_28.png" alt="Compbuild cinematic city render" />
-      <div class="hero-shade"></div>
-    </div>
-    <div class="hero-inner wrap">
-      <span class="eyebrow">What. Are. We.</span>
-      <h1 class="reveal">Pushing the boundaries of Minecraft.<br><span class="muted">We turn a game into a creative medium.</span></h1>
-      <div class="reveal" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
-        <button class="btn arrow" data-copy="PLAY.COMPBUILDREDUX.NET" title="Copy server IP">IP: PLAY.COMPBUILDREDUX.NET</button>
-        <a class="btn arrow" href="https://discord.gg/" target="_blank" rel="noopener">Join Discord</a>
+  <main>
+    <section class="hero">
+      <div>
+        <h1>WHAT. ARE. WE.</h1>
+        <p>We go out of our way to break the limits of Minecraft and turn it into more than just a game. Minecraft is our way of expression; it's our sandbox.</p>
+        <a href="#projects" class="cta">Explore Builds</a>
       </div>
-    </div>
-  </section>
+      <img src="placeholder_hero.jpg" alt="Hero Image Placeholder">
+    </section>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="wrap stack">
-      <h2 class="reveal">About Compbuild</h2>
-      <p class="lead reveal">Compbuild is a creative community founded in 2017. Our goal is creative expression through Minecraft—pushing the boundaries with every project.</p>
-    </div>
-  </section>
-
-  <!-- PROJECTS -->
-  <section id="projects">
-    <div class="wrap stack">
-      <div class="stack">
-        <h2 class="reveal">Our Projects</h2>
-        <p class="lead muted reveal">A small, polished gallery. Click any project to learn more.</p>
+    <section id="about" class="about">
+      <img src="placeholder_about.jpg" alt="About Placeholder">
+      <div>
+        <h2>PUSHING THE BOUNDARIES OF MINECRAFT</h2>
+        <p>Compbuild is a creative community founded in 2017. Our goal is to create creative expression through Minecraft as well as to push the boundaries with every project we take.</p>
       </div>
+    </section>
 
-      <div class="grid">
-        <!-- ALAIRE -->
-        <article class="card cols-3 reveal">
-          <a class="card-media" href="alaire.html" aria-label="Alaire">
-            <img loading="lazy" decoding="async" src="https://cdn.discordapp.com/attachments/772608163332489227/1403962808202297435/2024-05-31_18.52.19.png?ex=689975c1&is=68982441&hm=0a8ee5c1e04888fb6a2ab78a3c99e98e54d07d571afbb8d9629cdaa925aaaf07&" alt="Alaire — North American metropolis" />
-          </a>
-          <div class="card-body">
-            <h3>Alaire</h3>
-            <p class="muted">“A bustling North American metropolis with magnificent architecture.”</p>
-          </div>
-        </article>
-
-        <!-- AUSTIN -->
-        <article class="card cols-3 reveal">
-          <a class="card-media" href="/projects#Austin" aria-label="Austin">
-            <img loading="lazy" decoding="async" src="https://cdn.discordapp.com/attachments/772608163332489227/1403962808957141063/2025-04-12_19.35.03.png?ex=689975c2&is=68982442&hm=4cabb2ddd0c05d4afff15b7c0965296110f195d5c16d93201f4c0d80cab8a73a&" alt="Austin — modern Texan city" />
-          </a>
-          <div class="card-body">
-            <h3>Austin</h3>
-            <p class="muted">“This modern Texan city blends grit and gleaming skylines.”</p>
-          </div>
-        </article>
-
-        <!-- HAVELLE -->
-        <article class="card cols-3 reveal">
-          <a class="card-media" href="/projects#Havelle" aria-label="Havelle">
-            <img loading="lazy" decoding="async" src="https://cdn.discordapp.com/attachments/772608163332489227/1403962809649463430/2025-05-09_18.56.24.png?ex=689975c2&is=68982442&hm=a2f5293e5343f33837f023cdc4dc759b18d7cd79da97e61340fb5d77b0188357&" alt="Havelle — marshland river city" />
-          </a>
-          <div class="card-body">
-            <h3>Havelle</h3>
-            <p class="muted">“Nestled on a wide river of marshland, this prehistoric European city is timeless.”</p>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- PACK CALLOUT with gradient ring (EXPANDED) -->
-  <section id="pack">
-    <div class="wrap callout">
-      <!-- Gradient ring box -->
-      <div class="ring reveal">
-        <div class="box">
-          <h2>Compbuild Textures</h2>
-          <p class="lead">A one‑of‑a‑kind resource pack for architecture, visualization, and creativity. Regular updates, <b>1,000+ models & textures</b>, biome‑dependent blocks, and full‑block coverage.</p>
-          <div class="stack" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px">
-            <a class="btn arrow" href="https://compbuildredux.github.io/website/catalog.html" aria-label="Open catalog">Catalog</a>
-            <a class="btn arrow" href="https://compbuildredux.github.io/website/textures.html" aria-label="Read more about the pack">Read more</a>
-          </div>
-          <p class="muted" style="margin-top:10px">Requires OptiFine or Luminium.</p>
-        </div>
-      </div>
-      <!-- Showcase image back -->
-      <div class="box reveal">
-        <img loading="lazy" decoding="async" src="https://static.wixstatic.com/media/5f17e4_cc4be22a9aff4311a92220a5f33e6808~mv2.png/v1/fill/w_1200,h_750,al_c,q_85,enc_avif,quality_auto/2025-01-11_16_20_28.png" alt="Compbuild Textures showcase"/>
-      </div>
-    </div>
-
-    <!-- Details under the gradient ring -->
-    <div class="wrap pack-details">
-      <div class="details-grid">
+    <section id="projects" class="projects">
+      <div class="project">
+        <img src="placeholder_alaire.jpg" alt="Alaire Placeholder">
         <div>
-          <h3 class="muted" style="margin:0 0 6px">What’s inside</h3>
-          <ul class="bullets">
-            <li><b>Biome‑aware palettes</b> for plains, cherry groves, jungles, more.</li>
-            <li><b>1,000+ models & textures</b> tuned for architecture and viz.</li>
-            <li><b>Architecture‑first materials</b>: clean concrete, curated wool, color blocks.</li>
-            <li><b>Custom flora set</b> with clear silhouettes for landscaping.</li>
-            <li><b>Detail variants</b>: trapdoor, fence, and wall options.</li>
-          </ul>
+          <h2>ALAIRE</h2>
+          <p>“A bustling North American metropolis with sights of magnificent architecture.”</p>
         </div>
+      </div>
+      <div class="project">
+        <img src="placeholder_austin.jpg" alt="Austin Placeholder">
         <div>
-          <h3 class="muted" style="margin:0 0 6px">Why it’s different</h3>
-          <ul class="bullets">
-            <li><b>Smart blockstates</b> (e.g., repeater timing models) for storytelling.</li>
-            <li><b>Consistent keys</b> — namespaced, copyable biome identifiers.</li>
-            <li><b>Lightweight</b>, regularly updated; requires OptiFine or Luminium.</li>
-            <li><b>Catalog</b> for quick search and previews.</li>
-          </ul>
+          <h2>AUSTIN</h2>
+          <p>“This modern Texan city blends grit and gleaming skylines.”</p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section id="cta">
-    <div class="wrap stack">
-      <h2 class="reveal">What are you waiting for?</h2>
-      <p class="lead reveal">Become a member of our community today by joining our server and applying on our Discord.</p>
-      <div class="stack" style="display:flex; gap:10px; flex-wrap:wrap">
-        <button class="btn arrow" data-copy="PLAY.COMPBUILDREDUX.NET" title="Copy server IP">IP: PLAY.COMPBUILDREDUX.NET</button>
-        <a class="btn arrow" href="https://discord.gg/" target="_blank" rel="noopener">Join Discord</a>
+      <div class="project">
+        <img src="placeholder_havelle.jpg" alt="Havelle Placeholder">
+        <div>
+          <h2>HAVELLE</h2>
+          <p>“Nestled on a wide river of marshland, this prehistoric European city is timeless.”</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <footer class="wrap">
-    <div class="stack">
-      <div class="muted">©2025 COMPBUILD REDUX — Not an official Minecraft service. Not affiliated with Mojang or Microsoft.</div>
-    </div>
+    <section id="textures" class="textures">
+      <h2>CHANGING UP THE LOOKS</h2>
+      <p>A one of a kind revolutionary texture pack for Minecraft architecture, visualization, creativity, and made for more than just our projects. Download Compbuild Textures to make your creativity fantastic.</p>
+      <img src="placeholder_textures.jpg" alt="Textures Placeholder">
+      <a href="#" class="cta">Download Textures</a>
+    </section>
+
+    <section id="join" class="join">
+      <h2>WHAT ARE YOU WAITING FOR?</h2>
+      <p>Become a member of our community today by joining our server, as well as applying on our Discord.</p>
+      <a href="#" class="cta">Join Discord</a>
+    </section>
+  </main>
+
+  <footer>
+    <p>©2025 COMPBUILD REDUX</p>
+    <p>Not affiliated with Mojang or Microsoft.</p>
   </footer>
 
-  <div id="toast" class="toast" role="status" aria-live="polite">Copied!</div>
-
   <script>
-    // Theme toggle + persist + logo swap
-    const root = document.documentElement;
-    const toggle = document.getElementById('themeToggle');
-    const logo = document.getElementById('siteLogo');
-
-    // exact URLs you provided
-    const DARK_LOGO = 'https://cdn.discordapp.com/attachments/797200588214501466/1414726187644752133/WhiteTemp.png?ex=68c09def&is=68bf4c6f&hm=2ee1406341369914ca29c0e9b3c3c4995287ee13ed3346999ad4cf86425e020c&';
-    const LIGHT_LOGO = 'https://cdn.discordapp.com/attachments/797200588214501466/1414726186638250074/black.png?ex=68c09def&is=68bf4c6f&hm=77fbb0f5adcf58c379be157e7f871a0b62f3293aaf4d107663e9815ca11daa2b&';
-
-    function setTheme(theme){
-      root.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme);
-      logo.src = theme === 'dark' ? DARK_LOGO : LIGHT_LOGO;
-    }
-
-    // honor saved theme else default to current attribute (dark in your HTML)
-    const saved = localStorage.getItem('theme');
-    if(saved){ setTheme(saved); } else { setTheme(root.getAttribute('data-theme') || 'dark'); }
-
-    toggle.addEventListener('click', () => {
-      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      setTheme(next);
-    });
-
-    // Simple reveal-on-scroll (staggered)
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} })
-    }, {threshold: 0.12});
-    document.querySelectorAll('.reveal').forEach((el,i)=>{
-      el.style.transitionDelay = (i*40)+'ms';
-      io.observe(el);
-    });
-
-    // Copy to clipboard for all [data-copy]
-    const toast = document.getElementById('toast');
-    function showToast(){
-      toast.classList.add('show');
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(()=> toast.classList.remove('show'), 1400);
-    }
-    function copyText(str){
-      navigator.clipboard.writeText(str).then(showToast).catch(()=>{
-        const ta = document.createElement('textarea');
-        ta.value = str; document.body.appendChild(ta); ta.select();
-        try{ document.execCommand('copy'); showToast(); } finally { document.body.removeChild(ta); }
+    // Fade-in animation on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
       });
-    }
-    document.querySelectorAll('[data-copy]').forEach(btn=>{
-      btn.addEventListener('click', ()=> copyText(btn.getAttribute('data-copy')));
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('section').forEach(section => {
+      observer.observe(section);
     });
   </script>
 </body>
 </html>
+
 
 
 
